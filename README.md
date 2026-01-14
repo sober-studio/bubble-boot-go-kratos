@@ -1,51 +1,14 @@
-# Kratos Project Template
+# 基于 Kratos Layout 的 go 服务端起步项目
 
-## Install Kratos
-```
-go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
-```
-## Create a service
-```
-# Create a template project
-kratos new server
+## 集成组件
 
-cd server
-# Add a proto template
-kratos proto add api/server/server.proto
-# Generate the proto code
-kratos proto client api/server/server.proto
-# Generate the source code of service by proto file
-kratos proto server api/server/server.proto -t internal/service
+- JWT 认证
+- 短信服务（支持阿里云等）
+- 邮件服务（SMTP）
+- 对象存储服务（支持阿里源、七牛云存储等）
+- 定时任务
+- ……
 
-go generate ./...
-go build -o ./bin/ ./...
-./bin/server -conf ./configs
-```
-## Generate other auxiliary files by Makefile
-```
-# Download and update dependencies
-make init
-# Generate API files (include: pb.go, http, grpc, validate, swagger) by proto file
-make api
-# Generate all files
-make all
-```
-## Automated Initialization (wire)
-```
-# install wire
-go get github.com/google/wire/cmd/wire
+## 相关文档
 
-# generate wire
-cd cmd/server
-wire
-```
-
-## Docker
-```bash
-# build
-docker build -t <your-docker-image-name> .
-
-# run
-docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf <your-docker-image-name>
-```
-
+- [Kratos](https://go-kratos.dev/)
