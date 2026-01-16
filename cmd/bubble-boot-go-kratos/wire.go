@@ -6,11 +6,11 @@
 package main
 
 import (
-	"bubble-boot-go-kratos/internal/biz"
-	"bubble-boot-go-kratos/internal/conf"
-	"bubble-boot-go-kratos/internal/data"
-	"bubble-boot-go-kratos/internal/server"
-	"bubble-boot-go-kratos/internal/service"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/server"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -18,6 +18,11 @@ import (
 )
 
 // wireApp init kratos application.
-func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+func wireApp(*conf.Server, *conf.Data, *conf.Application, log.Logger) (*kratos.App, func(), error) {
+	panic(wire.Build(
+		server.ProviderSet,
+		data.ProviderSet,
+		//biz.ProviderSet,
+		auth.ProviderSet,
+		service.ProviderSet, newApp))
 }

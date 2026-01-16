@@ -11,5 +11,21 @@ data:
     source: root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local
   redis:
     addr: 127.0.0.1:6379
+    password: "shanshu#rds2026"
+    database: 0
     read_timeout: 0.2s
     write_timeout: 0.2s
+application:
+  authentication:
+    public_paths:
+      - /api.passport.v1.Passport/Register
+      - /api.passport.v1.Passport/LoginByPassword
+      - /api.passport.v1.Passport/LoginBySms
+      - /api.passport.v1.Passport/ResetPassword
+      - /api.public.v1.Public/
+    passport:
+      auto_register: true # 手机验证码登录时自动注册
+    jwt:
+      secret: dffdbc4da2d152c578a40a6071c131ff2673c82fafe00e4502719d8371e9da3a
+      store: redis # 存储方式 memory/redis
+      expire: 30 # token过期时间（天）

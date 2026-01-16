@@ -8,6 +8,7 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
+  Application application = 3;
 }
 
 message Server {
@@ -35,7 +36,26 @@ message Data {
     string addr = 2;
     google.protobuf.Duration read_timeout = 3;
     google.protobuf.Duration write_timeout = 4;
+    string password = 6;
+    int32 database = 7;
   }
   Database database = 1;
   Redis redis = 2;
+}
+
+message Application {
+  message Authentication {
+    message Passport {
+      bool auto_register = 1;
+    }
+    message JWT {
+      string secret = 1;
+      string store = 2;
+      int64 expire = 3;
+    }
+    repeated string public_paths = 1;
+    Passport passport = 2;
+    JWT jwt = 3;
+  }
+  Authentication authentication = 1;
 }

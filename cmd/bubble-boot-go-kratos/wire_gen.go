@@ -7,13 +7,13 @@
 package main
 
 import (
-	"bubble-boot-go-kratos/internal/biz"
-	"bubble-boot-go-kratos/internal/conf"
-	"bubble-boot-go-kratos/internal/data"
-	"bubble-boot-go-kratos/internal/server"
-	"bubble-boot-go-kratos/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/server"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
 )
 
 import (
@@ -23,18 +23,15 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData)
-	if err != nil {
-		return nil, nil, err
-	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
+func wireApp(confServer *conf.Server, confData *conf.Data, application *conf.Application, logger log.Logger) (*kratos.App, func(), error) {
+	grpcServer := server.NewGRPCServer(confServer, logger)
+	publicService := service.NewPublicService()
+	passportService := service.NewPassportService()
+	client := data.NewRedis(confData, logger)
+	tokenStore := auth.NewTokenStore(application, client)
+	tokenService := auth.NewTokenService(application, tokenStore)
+	httpServer := server.NewHTTPServer(confServer, application, publicService, passportService, tokenService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup()
 	}, nil
 }
