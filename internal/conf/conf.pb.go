@@ -138,6 +138,7 @@ type Data struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Database      *Data_Database         `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
 	Redis         *Data_Redis            `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
+	WorkerId      int64                  `protobuf:"varint,3,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -184,6 +185,13 @@ func (x *Data) GetRedis() *Data_Redis {
 		return x.Redis
 	}
 	return nil
+}
+
+func (x *Data) GetWorkerId() int64 {
+	if x != nil {
+		return x.WorkerId
+	}
+	return 0
 }
 
 type Application struct {
@@ -359,11 +367,15 @@ func (x *Server_GRPC) GetTimeout() *durationpb.Duration {
 }
 
 type Data_Database struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Driver        string                 `protobuf:"bytes,1,opt,name=driver,proto3" json:"driver,omitempty"`
-	Source        string                 `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Driver string                 `protobuf:"bytes,1,opt,name=driver,proto3" json:"driver,omitempty"`
+	Source string                 `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
+	// 连接池配置
+	MaxIdleConns    int32                `protobuf:"varint,3,opt,name=max_idle_conns,json=maxIdleConns,proto3" json:"max_idle_conns,omitempty"`
+	MaxOpenConns    int32                `protobuf:"varint,4,opt,name=max_open_conns,json=maxOpenConns,proto3" json:"max_open_conns,omitempty"`
+	ConnMaxLifetime *durationpb.Duration `protobuf:"bytes,5,opt,name=conn_max_lifetime,json=connMaxLifetime,proto3" json:"conn_max_lifetime,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Data_Database) Reset() {
@@ -410,14 +422,36 @@ func (x *Data_Database) GetSource() string {
 	return ""
 }
 
+func (x *Data_Database) GetMaxIdleConns() int32 {
+	if x != nil {
+		return x.MaxIdleConns
+	}
+	return 0
+}
+
+func (x *Data_Database) GetMaxOpenConns() int32 {
+	if x != nil {
+		return x.MaxOpenConns
+	}
+	return 0
+}
+
+func (x *Data_Database) GetConnMaxLifetime() *durationpb.Duration {
+	if x != nil {
+		return x.ConnMaxLifetime
+	}
+	return nil
+}
+
 type Data_Redis struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	ReadTimeout   *durationpb.Duration   `protobuf:"bytes,3,opt,name=read_timeout,json=readTimeout,proto3" json:"read_timeout,omitempty"`
-	WriteTimeout  *durationpb.Duration   `protobuf:"bytes,4,opt,name=write_timeout,json=writeTimeout,proto3" json:"write_timeout,omitempty"`
-	Password      string                 `protobuf:"bytes,6,opt,name=password,proto3" json:"password,omitempty"`
-	Database      int32                  `protobuf:"varint,7,opt,name=database,proto3" json:"database,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 移除 network 字段
+	Addr          string               `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
+	ReadTimeout   *durationpb.Duration `protobuf:"bytes,3,opt,name=read_timeout,json=readTimeout,proto3" json:"read_timeout,omitempty"`
+	WriteTimeout  *durationpb.Duration `protobuf:"bytes,4,opt,name=write_timeout,json=writeTimeout,proto3" json:"write_timeout,omitempty"`
+	Password      string               `protobuf:"bytes,6,opt,name=password,proto3" json:"password,omitempty"`
+	Database      int32                `protobuf:"varint,7,opt,name=database,proto3" json:"database,omitempty"`
+	PoolSize      int32                `protobuf:"varint,8,opt,name=pool_size,json=poolSize,proto3" json:"pool_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -452,13 +486,6 @@ func (*Data_Redis) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{2, 1}
 }
 
-func (x *Data_Redis) GetNetwork() string {
-	if x != nil {
-		return x.Network
-	}
-	return ""
-}
-
 func (x *Data_Redis) GetAddr() string {
 	if x != nil {
 		return x.Addr
@@ -490,6 +517,13 @@ func (x *Data_Redis) GetPassword() string {
 func (x *Data_Redis) GetDatabase() int32 {
 	if x != nil {
 		return x.Database
+	}
+	return 0
+}
+
+func (x *Data_Redis) GetPoolSize() int32 {
+	if x != nil {
+		return x.PoolSize
 	}
 	return 0
 }
@@ -678,20 +712,24 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\x95\x03\n" +
+	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xc9\x04\n" +
 	"\x04Data\x125\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x19.kratos.api.Data.DatabaseR\bdatabase\x12,\n" +
-	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x1a:\n" +
+	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x12\x1b\n" +
+	"\tworker_id\x18\x03 \x01(\x03R\bworkerId\x1a\xcd\x01\n" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
-	"\x06source\x18\x02 \x01(\tR\x06source\x1a\xeb\x01\n" +
-	"\x05Redis\x12\x18\n" +
-	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
+	"\x06source\x18\x02 \x01(\tR\x06source\x12$\n" +
+	"\x0emax_idle_conns\x18\x03 \x01(\x05R\fmaxIdleConns\x12$\n" +
+	"\x0emax_open_conns\x18\x04 \x01(\x05R\fmaxOpenConns\x12E\n" +
+	"\x11conn_max_lifetime\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxLifetime\x1a\xee\x01\n" +
+	"\x05Redis\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x12<\n" +
 	"\fread_timeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vreadTimeout\x12>\n" +
 	"\rwrite_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x12\x1a\n" +
 	"\bpassword\x18\x06 \x01(\tR\bpassword\x12\x1a\n" +
-	"\bdatabase\x18\a \x01(\x05R\bdatabase\"\xb9\x03\n" +
+	"\bdatabase\x18\a \x01(\x05R\bdatabase\x12\x1b\n" +
+	"\tpool_size\x18\b \x01(\x05R\bpoolSize\"\xb9\x03\n" +
 	"\vApplication\x12N\n" +
 	"\x0eauthentication\x18\x01 \x01(\v2&.kratos.api.Application.AuthenticationR\x0eauthentication\x12\x1b\n" +
 	"\tworker_id\x18\x02 \x01(\x03R\bworkerId\x1a\xbc\x02\n" +
@@ -744,15 +782,16 @@ var file_conf_conf_proto_depIdxs = []int32{
 	8,  // 7: kratos.api.Application.authentication:type_name -> kratos.api.Application.Authentication
 	11, // 8: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
 	11, // 9: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	11, // 10: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	11, // 11: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	9,  // 12: kratos.api.Application.Authentication.passport:type_name -> kratos.api.Application.Authentication.Passport
-	10, // 13: kratos.api.Application.Authentication.jwt:type_name -> kratos.api.Application.Authentication.JWT
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	11, // 10: kratos.api.Data.Database.conn_max_lifetime:type_name -> google.protobuf.Duration
+	11, // 11: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	11, // 12: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	9,  // 13: kratos.api.Application.Authentication.passport:type_name -> kratos.api.Application.Authentication.Passport
+	10, // 14: kratos.api.Application.Authentication.jwt:type_name -> kratos.api.Application.Authentication.JWT
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }

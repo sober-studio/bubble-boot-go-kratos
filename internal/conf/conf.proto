@@ -30,14 +30,19 @@ message Data {
   message Database {
     string driver = 1;
     string source = 2;
+    // 连接池配置
+    int32 max_idle_conns = 3;
+    int32 max_open_conns = 4;
+    google.protobuf.Duration conn_max_lifetime = 5;
   }
   message Redis {
-    string network = 1;
+    // 移除 network 字段
     string addr = 2;
     google.protobuf.Duration read_timeout = 3;
     google.protobuf.Duration write_timeout = 4;
     string password = 6;
     int32 database = 7;
+    int32 pool_size = 8;
   }
   Database database = 1;
   Redis redis = 2;

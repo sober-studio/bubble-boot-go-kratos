@@ -55,6 +55,11 @@ generate:
 	go generate ./...
 	go mod tidy
 
+.PHONY: gormgen
+# generate gorm models and query code
+gormgen:
+	go run ./cmd/gormgen -conf configs/config.yaml
+
 .PHONY: all
 # generate all
 all:
