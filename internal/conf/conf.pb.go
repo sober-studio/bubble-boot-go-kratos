@@ -189,6 +189,7 @@ func (x *Data) GetRedis() *Data_Redis {
 type Application struct {
 	state          protoimpl.MessageState      `protogen:"open.v1"`
 	Authentication *Application_Authentication `protobuf:"bytes,1,opt,name=authentication,proto3" json:"authentication,omitempty"`
+	WorkerId       int64                       `protobuf:"varint,2,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -228,6 +229,13 @@ func (x *Application) GetAuthentication() *Application_Authentication {
 		return x.Authentication
 	}
 	return nil
+}
+
+func (x *Application) GetWorkerId() int64 {
+	if x != nil {
+		return x.WorkerId
+	}
+	return 0
 }
 
 type Server_HTTP struct {
@@ -683,9 +691,10 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\fread_timeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vreadTimeout\x12>\n" +
 	"\rwrite_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x12\x1a\n" +
 	"\bpassword\x18\x06 \x01(\tR\bpassword\x12\x1a\n" +
-	"\bdatabase\x18\a \x01(\x05R\bdatabase\"\x9c\x03\n" +
+	"\bdatabase\x18\a \x01(\x05R\bdatabase\"\xb9\x03\n" +
 	"\vApplication\x12N\n" +
-	"\x0eauthentication\x18\x01 \x01(\v2&.kratos.api.Application.AuthenticationR\x0eauthentication\x1a\xbc\x02\n" +
+	"\x0eauthentication\x18\x01 \x01(\v2&.kratos.api.Application.AuthenticationR\x0eauthentication\x12\x1b\n" +
+	"\tworker_id\x18\x02 \x01(\x03R\bworkerId\x1a\xbc\x02\n" +
 	"\x0eAuthentication\x12!\n" +
 	"\fpublic_paths\x18\x01 \x03(\tR\vpublicPaths\x12K\n" +
 	"\bpassport\x18\x02 \x01(\v2/.kratos.api.Application.Authentication.PassportR\bpassport\x12<\n" +

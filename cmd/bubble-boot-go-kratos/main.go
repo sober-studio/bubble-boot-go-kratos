@@ -80,7 +80,7 @@ func main() {
 	}
 	defer cleanup()
 
-	// start and wait for stop signal
+	// start and wait for a stop signal
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

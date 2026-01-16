@@ -6,13 +6,19 @@ import (
 
 	"github.com/redis/go-redis/v9"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/idgen"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/idgen/snowflake"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewRedis)
+var ProviderSet = wire.NewSet(
+	NewData,
+	NewRedis,
+	NewIDGenerator,
+)
 
 // Data .
 type Data struct {
@@ -46,4 +52,9 @@ func NewRedis(c *conf.Data, l log.Logger) *redis.Client {
 	}
 
 	return rdb
+}
+
+// NewIDGenerator 初始化 ID 生成器
+func NewIDGenerator(app *conf.Application) idgen.IDGenerator {
+	return snowflake.NewSnowflake(app.WorkerId)
 }
