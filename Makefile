@@ -62,6 +62,11 @@ all:
 	make config
 	make generate
 
+.PHONY: dev
+# start dev infrastructure (pgsql, redis)
+dev:
+	docker-compose up -d pgsql redis
+
 # show help
 help:
 	@echo ''
