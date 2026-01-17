@@ -31,9 +31,9 @@ var ProviderSet = wire.NewSet(
 // Data .
 // 注意：所有需要关闭的资源必须在 cleanup 中显式处理
 type Data struct {
-	db  *gorm.DB
-	rdb *redis.Client
-	//query *query.Query // GORM Gen 生成的查询对象
+	db    *gorm.DB
+	rdb   *redis.Client
+	query *query.Query
 	//oss   biz.OSS
 }
 
@@ -49,9 +49,9 @@ func NewData(c *conf.Data, logger log.Logger, db *gorm.DB, rdb *redis.Client) (*
 	}
 
 	return &Data{
-		db:  db,
-		rdb: rdb,
-		//query: query.Use(db), // 初始化 GORM Gen 查询实例
+		db:    db,
+		rdb:   rdb,
+		query: query.Use(db),
 		//oss:   oss,
 	}, cleanup, nil
 }
