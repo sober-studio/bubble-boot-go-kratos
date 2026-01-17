@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/biz"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data/model"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data/query"
@@ -23,6 +24,7 @@ var ProviderSet = wire.NewSet(
 	NewData,
 	NewRedis,
 	NewIDGenerator,
+	wire.Bind(new(biz.Transaction), new(*Data)),
 )
 
 // Data .
