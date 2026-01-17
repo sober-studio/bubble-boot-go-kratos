@@ -24,6 +24,7 @@ var ProviderSet = wire.NewSet(
 	NewData,
 	NewRedis,
 	NewIDGenerator,
+	NewRedisCaptchaStore,
 	wire.Bind(new(biz.Transaction), new(*Data)),
 )
 
