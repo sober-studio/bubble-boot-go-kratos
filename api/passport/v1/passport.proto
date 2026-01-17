@@ -1,0 +1,340 @@
+syntax = "proto3";
+
+package api.passport.v1;
+
+option go_package = "github.com/sober-studio/bubble-boot-go-kratos/api/passport/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.passport.v1";
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "openapi/v3/annotations.proto";
+
+service Passport {
+	// 用户注册
+	rpc Register (RegisterRequest) returns (RegisterReply) {
+		option (google.api.http) = {
+			post: "/passport/register"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "用户注册"
+		};
+	}
+
+	// 密码登录
+	rpc LoginByPassword (LoginByPasswordRequest) returns (LoginReply) {
+		option (google.api.http) = {
+			post: "/passport/login/password"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "密码登录"
+		};
+	}
+
+	// 验证码登录
+	rpc LoginByOtp (LoginByOtpRequest) returns (LoginReply) {
+		option (google.api.http) = {
+			post: "/passport/login/otp"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "验证码登录"
+		};
+	}
+
+	// 用户退出
+	rpc Logout (LogoutRequest) returns (LogoutReply) {
+		option (google.api.http) = {
+			post: "/passport/logout"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "用户退出"
+		};
+	}
+
+	// 获取用户信息
+	rpc UserInfo (UserInfoRequest) returns (UserInfoReply) {
+		option (google.api.http) = {
+			get: "/passport/user-info"
+		};
+		option(openapi.v3.operation) = {
+			summary: "获取用户信息"
+		};
+	}
+
+	// 修改密码
+	rpc UpdatePassword (UpdatePasswordRequest) returns (UpdatePasswordReply) {
+		option (google.api.http) = {
+			post: "/passport/update-password"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "修改密码"
+		};
+	}
+
+	// 绑定手机号
+	rpc BindMobile (BindMobileRequest) returns (BindMobileReply) {
+		option (google.api.http) = {
+			post: "/passport/bind-mobile"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "绑定手机号"
+		};
+	}
+
+	// 修改绑定手机号
+	rpc UpdateMobile (UpdateMobileRequest) returns (UpdateMobileReply) {
+		option (google.api.http) = {
+			post: "/passport/update-mobile"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "修改绑定手机号"
+		};
+	}
+
+	// 找回密码
+	rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordReply) {
+		option (google.api.http) = {
+			post: "/passport/reset-password"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "找回密码"
+		};
+	}
+}
+
+// ========== 用户注册 ==========
+message RegisterRequest {
+	// 用户名，规则：3-20位字符
+	string username = 1 [
+		json_name = "username",
+		(openapi.v3.property) = { description: "用户名，3-20位字符" },
+		(validate.rules).string = {min_len: 3, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 密码，规则：6-20位字符
+	string password = 2 [
+		json_name = "password",
+		(openapi.v3.property) = { description: "密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 确认密码，规则：6-20位字符
+	string confirm_password = 3 [
+		json_name = "confirm_password",
+		(openapi.v3.property) = { description: "确认密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+message RegisterReply {
+	// 登录凭证
+	string token = 1 [
+		json_name = "token",
+		(openapi.v3.property) = { description: "登录凭证" }
+	];
+}
+
+// ========== 密码登录 ==========
+message LoginByPasswordRequest {
+	// 用户名，规则：3-20位字符
+	string username = 1 [
+		json_name = "username",
+		(openapi.v3.property) = { description: "用户名，3-20位字符" },
+		(validate.rules).string = {min_len: 3, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 密码，规则：6-20位字符
+	string password = 2 [
+		json_name = "password",
+		(openapi.v3.property) = { description: "密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 图形验证码ID
+	string captcha_id = 3 [
+		json_name = "captcha_id",
+		(openapi.v3.property) = { description: "图形验证码ID" },
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 图形验证码
+	string captcha = 4 [
+		json_name = "captcha",
+		(openapi.v3.property) = { description: "图形验证码内容" },
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+// ========== 验证码登录 ==========
+message LoginByOtpRequest {
+	// 手机号，规则：11位数字
+	string mobile = 1 [
+		json_name = "mobile",
+		(openapi.v3.property) = {description: "手机号，11位数字"},
+		(validate.rules).string = {pattern: "^1[3-9]\\d{9}$"}
+	];
+	// 验证码
+	string code = 3 [
+		json_name = "code",
+		(openapi.v3.property) = { description: "验证码，4-6位字符" },
+		(validate.rules).string = {min_len: 4, max_len: 6},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 图形验证码ID
+	string captcha_id = 4 [
+		json_name = "captcha_id",
+		(openapi.v3.property) = { description: "图形验证码ID" },
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 图形验证码
+	string captcha = 5 [
+		json_name = "captcha",
+		(openapi.v3.property) = { description: "图形验证码内容" },
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+// ========== 登录响应 ==========
+message LoginReply {
+	// 登录凭证
+	string token = 1 [
+		json_name = "token",
+		(openapi.v3.property) = { description: "登录凭证" }
+	];
+}
+
+// ========== 用户退出 ==========
+message LogoutRequest {}
+
+message LogoutReply {}
+
+// ========== 获取用户信息 ==========
+message UserInfoRequest {}
+
+message UserInfoReply {
+	// 用户名
+	string username = 1 [
+		json_name = "username",
+		(openapi.v3.property) = { description: "用户名" }
+	];
+	// 手机号
+	string mobile = 2 [
+		json_name = "mobile",
+		(openapi.v3.property) = { description: "手机号" }
+	];
+	// 状态：0=禁用，1=正常
+	int32 status = 3 [
+		json_name = "status",
+		(openapi.v3.property) = { description: "状态：0=禁用，1=正常" }
+	];
+}
+
+// ========== 修改密码 ==========
+message UpdatePasswordRequest {
+	// 旧密码，规则：6-20位字符
+	string old_password = 1 [
+		json_name = "old_password",
+		(openapi.v3.property) = { description: "旧密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 新密码，规则：6-20位字符
+	string new_password = 2 [
+		json_name = "new_password",
+		(openapi.v3.property) = { description: "新密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 确认新密码，规则：6-20位字符
+	string confirm_password = 3 [
+		json_name = "confirm_password",
+		(openapi.v3.property) = { description: "确认新密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+message UpdatePasswordReply {}
+
+// ========== 绑定手机号 ==========
+message BindMobileRequest {
+	// 手机号，规则：11位数字
+	string mobile = 1 [
+		json_name = "mobile",
+		(openapi.v3.property) = { description: "手机号，11位数字" },
+		(validate.rules).string = {pattern: "^1[3-9]\\d{9}$"},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 验证码
+	string code = 2 [
+		json_name = "code",
+		(openapi.v3.property) = { description: "验证码，4-6位字符" },
+		(validate.rules).string = {min_len: 4, max_len: 6},
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+message BindMobileReply {}
+
+// ========== 修改绑定手机号 ==========
+message UpdateMobileRequest {
+	// 新手机号，规则：11位数字
+	string mobile = 1 [
+		json_name = "mobile",
+		(openapi.v3.property) = { description: "新手机号，11位数字" },
+		(validate.rules).string = {pattern: "^1[3-9]\\d{9}$"},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 验证码
+	string code = 2 [
+		json_name = "code",
+		(openapi.v3.property) = { description: "验证码，4-6位字符" },
+		(validate.rules).string = {min_len: 4, max_len: 6},
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+message UpdateMobileReply {}
+
+// ========== 找回密码 ==========
+message ResetPasswordRequest {
+	// 手机号，规则：11位数字
+	string mobile = 1 [
+		json_name = "mobile",
+		(openapi.v3.property) = { description: "手机号，11位数字" },
+		(validate.rules).string = {pattern: "^1[3-9]\\d{9}$"},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 短信验证码
+	string sms_code = 2 [
+		json_name = "sms_code",
+		(openapi.v3.property) = { description: "短信验证码，4-6位字符" },
+		(validate.rules).string = {min_len: 4, max_len: 6},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 新密码，规则：6-20位字符
+	string new_password = 3 [
+		json_name = "new_password",
+		(openapi.v3.property) = { description: "新密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 确认新密码，规则：6-20位字符
+	string confirm_password = 4 [
+		json_name = "confirm_password",
+		(openapi.v3.property) = { description: "确认新密码，6-20位字符" },
+		(validate.rules).string = {min_len: 6, max_len: 20},
+		(google.api.field_behavior) = REQUIRED
+	];
+}
+
+message ResetPasswordReply {}

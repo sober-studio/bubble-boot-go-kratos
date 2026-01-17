@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package api.passport.v1;
+
+option go_package = "github.com/sober-studio/bubble-boot-go-kratos/api/passport/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.passport.v1";
+
+import "errors/errors.proto";
+
+enum PassportErrorReason {
+  // 设置默认的 HTTP 状态码为 400
+  option (errors.default_code) = 400;
+
+  REGISTER_FAILED = 0;
+  LOGIN_FAILED = 1;
+
+  // 手机号已经被注册
+  PHONE_ALREADY_REGISTERED = 2;
+  // 身份证号已经被注册
+  ID_CARD_ALREADY_REGISTERED = 3;
+
+  // 用户名或密码错误
+  USERNAME_OR_PASSWORD_ERROR = 4;
+  // 用户被禁用
+  USER_DISABLED = 5;
+  // 用户被加入黑名单
+  USER_BLACKLISTED = 6;
+  // 用户不存在
+  USER_NOT_FOUND = 7;
+
+  // 注销失败
+  LOGOUT_FAILED = 8;
+
+  // 两次密码不一致
+  PASSWORD_NOT_MATCH = 9;
+  // 重置密码失败
+  RESET_PASSWORD_FAILED = 10;
+}

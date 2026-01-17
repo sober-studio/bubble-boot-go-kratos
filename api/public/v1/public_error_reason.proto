@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package api.public.v1;
+
+option go_package = "github.com/sober-studio/bubble-boot-go-kratos/api/public/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.public.v1";
+
+import "errors/errors.proto";
+
+enum PublicErrorReason {
+	// 设置默认的 HTTP 状态码为 400
+	option (errors.default_code) = 400;
+
+	// 图形验证码生成错误
+	IMAGE_CAPTCHA_GENERATE_FAILED = 0;
+	// 图形验证码错误
+	IMAGE_CAPTCHA_VERIFY_FAILED = 1;
+
+	// 短信验证码场景错误
+	SMS_SCENE_INVALID = 2;
+	// 短信验证码发送过于频繁
+	SMS_SEND_TOO_FREQUENT = 3;
+	// 短信验证码发送异常
+	SMS_SENDER_ERROR = 4;
+	// 短信验证码错误
+	SMS_CODE_ERROR = 5;
+
+}

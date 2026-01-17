@@ -3,37 +3,422 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: ""
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
+    /passport/bind-mobile:
+        post:
             tags:
-                - Greeter
-                - subgroup
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - Passport
+            summary: 绑定手机号
+            description: 绑定手机号
+            operationId: Passport_BindMobile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.BindMobileRequest'
+                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+                                $ref: '#/components/schemas/api.passport.v1.BindMobileReply'
+    /passport/login/otp:
+        post:
+            tags:
+                - Passport
+            summary: 验证码登录
+            description: 验证码登录
+            operationId: Passport_LoginByOtp
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.LoginByOtpRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.LoginReply'
+    /passport/login/password:
+        post:
+            tags:
+                - Passport
+            summary: 密码登录
+            description: 密码登录
+            operationId: Passport_LoginByPassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.LoginByPasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.LoginReply'
+    /passport/logout:
+        post:
+            tags:
+                - Passport
+            summary: 用户退出
+            description: 用户退出
+            operationId: Passport_Logout
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.LogoutRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.LogoutReply'
+    /passport/register:
+        post:
+            tags:
+                - Passport
+            summary: 用户注册
+            description: 用户注册
+            operationId: Passport_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.RegisterReply'
+    /passport/reset-password:
+        post:
+            tags:
+                - Passport
+            summary: 找回密码
+            description: 找回密码
+            operationId: Passport_ResetPassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.ResetPasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.ResetPasswordReply'
+    /passport/update-mobile:
+        post:
+            tags:
+                - Passport
+            summary: 修改绑定手机号
+            description: 修改绑定手机号
+            operationId: Passport_UpdateMobile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.UpdateMobileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.UpdateMobileReply'
+    /passport/update-password:
+        post:
+            tags:
+                - Passport
+            summary: 修改密码
+            description: 修改密码
+            operationId: Passport_UpdatePassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.passport.v1.UpdatePasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.UpdatePasswordReply'
+    /passport/user-info:
+        get:
+            tags:
+                - Passport
+            summary: 获取用户信息
+            description: 获取用户信息
+            operationId: Passport_UserInfo
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.passport.v1.UserInfoReply'
+    /public/captcha:
+        get:
+            tags:
+                - Public
+            summary: 获取图形验证码
+            description: 获取图形验证码
+            operationId: Public_GetCaptcha
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.public.v1.GetCaptchaReply'
+    /public/sms-code:
+        post:
+            tags:
+                - Public
+            summary: 获取短信验证码
+            description: 获取短信验证码
+            operationId: Public_SendSmsCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.public.v1.SendSmsCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.public.v1.SendSmsCodeReply'
 components:
     schemas:
-        helloworld.v1.HelloReply:
+        api.passport.v1.BindMobileReply:
+            type: object
+            properties: {}
+        api.passport.v1.BindMobileRequest:
+            required:
+                - mobile
+                - code
             type: object
             properties:
-                message:
+                mobile:
                     type: string
-            description: The response message containing the greetings
+                    description: 手机号，11位数字
+                code:
+                    type: string
+                    description: 验证码，4-6位字符
+            description: ========== 绑定手机号 ==========
+        api.passport.v1.LoginByOtpRequest:
+            required:
+                - code
+                - captcha_id
+                - captcha
+            type: object
+            properties:
+                mobile:
+                    type: string
+                    description: 手机号，11位数字
+                code:
+                    type: string
+                    description: 验证码，4-6位字符
+                captcha_id:
+                    type: string
+                    description: 图形验证码ID
+                captcha:
+                    type: string
+                    description: 图形验证码内容
+            description: ========== 验证码登录 ==========
+        api.passport.v1.LoginByPasswordRequest:
+            required:
+                - username
+                - password
+                - captcha_id
+                - captcha
+            type: object
+            properties:
+                username:
+                    type: string
+                    description: 用户名，3-20位字符
+                password:
+                    type: string
+                    description: 密码，6-20位字符
+                captcha_id:
+                    type: string
+                    description: 图形验证码ID
+                captcha:
+                    type: string
+                    description: 图形验证码内容
+            description: ========== 密码登录 ==========
+        api.passport.v1.LoginReply:
+            type: object
+            properties:
+                token:
+                    type: string
+                    description: 登录凭证
+            description: ========== 登录响应 ==========
+        api.passport.v1.LogoutReply:
+            type: object
+            properties: {}
+        api.passport.v1.LogoutRequest:
+            type: object
+            properties: {}
+            description: ========== 用户退出 ==========
+        api.passport.v1.RegisterReply:
+            type: object
+            properties:
+                token:
+                    type: string
+                    description: 登录凭证
+        api.passport.v1.RegisterRequest:
+            required:
+                - username
+                - password
+                - confirm_password
+            type: object
+            properties:
+                username:
+                    type: string
+                    description: 用户名，3-20位字符
+                password:
+                    type: string
+                    description: 密码，6-20位字符
+                confirm_password:
+                    type: string
+                    description: 确认密码，6-20位字符
+            description: ========== 用户注册 ==========
+        api.passport.v1.ResetPasswordReply:
+            type: object
+            properties: {}
+        api.passport.v1.ResetPasswordRequest:
+            required:
+                - mobile
+                - sms_code
+                - new_password
+                - confirm_password
+            type: object
+            properties:
+                mobile:
+                    type: string
+                    description: 手机号，11位数字
+                sms_code:
+                    type: string
+                    description: 短信验证码，4-6位字符
+                new_password:
+                    type: string
+                    description: 新密码，6-20位字符
+                confirm_password:
+                    type: string
+                    description: 确认新密码，6-20位字符
+            description: ========== 找回密码 ==========
+        api.passport.v1.UpdateMobileReply:
+            type: object
+            properties: {}
+        api.passport.v1.UpdateMobileRequest:
+            required:
+                - mobile
+                - code
+            type: object
+            properties:
+                mobile:
+                    type: string
+                    description: 新手机号，11位数字
+                code:
+                    type: string
+                    description: 验证码，4-6位字符
+            description: ========== 修改绑定手机号 ==========
+        api.passport.v1.UpdatePasswordReply:
+            type: object
+            properties: {}
+        api.passport.v1.UpdatePasswordRequest:
+            required:
+                - old_password
+                - new_password
+                - confirm_password
+            type: object
+            properties:
+                old_password:
+                    type: string
+                    description: 旧密码，6-20位字符
+                new_password:
+                    type: string
+                    description: 新密码，6-20位字符
+                confirm_password:
+                    type: string
+                    description: 确认新密码，6-20位字符
+            description: ========== 修改密码 ==========
+        api.passport.v1.UserInfoReply:
+            type: object
+            properties:
+                username:
+                    type: string
+                    description: 用户名
+                mobile:
+                    type: string
+                    description: 手机号
+                status:
+                    type: integer
+                    description: 状态：0=禁用，1=正常
+                    format: int32
+        api.public.v1.GetCaptchaReply:
+            type: object
+            properties:
+                captcha_id:
+                    type: string
+                    description: 验证码id
+                image_b64:
+                    type: string
+                    description: 验证码内容
+        api.public.v1.SendSmsCodeReply:
+            type: object
+            properties:
+                expire_at:
+                    type: string
+                    description: 验证码过期时间戳，单位秒
+        api.public.v1.SendSmsCodeRequest:
+            required:
+                - mobile
+                - captcha_id
+                - captcha
+                - scene
+            type: object
+            properties:
+                mobile:
+                    type: string
+                    description: 手机号，11位数字
+                captcha_id:
+                    type: string
+                    description: 图形验证码ID
+                captcha:
+                    type: string
+                    description: 图形验证码内容
+                scene:
+                    type: integer
+                    description: 短信验证码业务场景
+                    format: enum
 tags:
-    - name: Greeter
+    - name: Passport
+    - name: Public
