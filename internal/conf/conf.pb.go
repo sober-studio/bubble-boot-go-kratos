@@ -138,7 +138,6 @@ type Data struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Database      *Data_Database         `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
 	Redis         *Data_Redis            `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
-	WorkerId      int64                  `protobuf:"varint,3,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -187,17 +186,11 @@ func (x *Data) GetRedis() *Data_Redis {
 	return nil
 }
 
-func (x *Data) GetWorkerId() int64 {
-	if x != nil {
-		return x.WorkerId
-	}
-	return 0
-}
-
 type Application struct {
 	state          protoimpl.MessageState      `protogen:"open.v1"`
 	Authentication *Application_Authentication `protobuf:"bytes,1,opt,name=authentication,proto3" json:"authentication,omitempty"`
-	WorkerId       int64                       `protobuf:"varint,2,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
+	Env            string                      `protobuf:"bytes,2,opt,name=env,proto3" json:"env,omitempty"`
+	WorkerId       int64                       `protobuf:"varint,3,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -237,6 +230,13 @@ func (x *Application) GetAuthentication() *Application_Authentication {
 		return x.Authentication
 	}
 	return nil
+}
+
+func (x *Application) GetEnv() string {
+	if x != nil {
+		return x.Env
+	}
+	return ""
 }
 
 func (x *Application) GetWorkerId() int64 {
@@ -712,11 +712,10 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xc9\x04\n" +
+	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xac\x04\n" +
 	"\x04Data\x125\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x19.kratos.api.Data.DatabaseR\bdatabase\x12,\n" +
-	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x12\x1b\n" +
-	"\tworker_id\x18\x03 \x01(\x03R\bworkerId\x1a\xcd\x01\n" +
+	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x1a\xcd\x01\n" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12$\n" +
@@ -729,10 +728,11 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\rwrite_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x12\x1a\n" +
 	"\bpassword\x18\x06 \x01(\tR\bpassword\x12\x1a\n" +
 	"\bdatabase\x18\a \x01(\x05R\bdatabase\x12\x1b\n" +
-	"\tpool_size\x18\b \x01(\x05R\bpoolSize\"\xb9\x03\n" +
+	"\tpool_size\x18\b \x01(\x05R\bpoolSize\"\xcb\x03\n" +
 	"\vApplication\x12N\n" +
-	"\x0eauthentication\x18\x01 \x01(\v2&.kratos.api.Application.AuthenticationR\x0eauthentication\x12\x1b\n" +
-	"\tworker_id\x18\x02 \x01(\x03R\bworkerId\x1a\xbc\x02\n" +
+	"\x0eauthentication\x18\x01 \x01(\v2&.kratos.api.Application.AuthenticationR\x0eauthentication\x12\x10\n" +
+	"\x03env\x18\x02 \x01(\tR\x03env\x12\x1b\n" +
+	"\tworker_id\x18\x03 \x01(\x03R\bworkerId\x1a\xbc\x02\n" +
 	"\x0eAuthentication\x12!\n" +
 	"\fpublic_paths\x18\x01 \x03(\tR\vpublicPaths\x12K\n" +
 	"\bpassport\x18\x02 \x01(\v2/.kratos.api.Application.Authentication.PassportR\bpassport\x12<\n" +

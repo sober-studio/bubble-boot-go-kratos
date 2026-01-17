@@ -41,6 +41,7 @@ services:
     command: ["./bubble-boot-go-kratos", "-conf", "/data/conf"]
     environment:
       TZ: ${TZ}
+      ENV: ${ENV}
       NODE_ID: ${NODE_ID}
     ports:
       - "${APP_HTTP_PORT}:8000"

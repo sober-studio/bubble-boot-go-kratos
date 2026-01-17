@@ -5,6 +5,8 @@ import (
 	publicV1 "github.com/sober-studio/bubble-boot-go-kratos/api/public/v1"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/debug"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/render"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -27,6 +29,9 @@ func NewHTTPServer(
 			recovery.Recovery(),
 			auth.Middleware(tokenService, auth.PathAccessConfigWithPublicList(app.Authentication.PublicPaths)),
 		),
+		http.Filter(debug.Filter),
+		http.ResponseEncoder(render.ResponseEncoder),
+		http.ErrorEncoder(render.ErrorEncoder),
 	}
 
 	if c.Http.Network != "" {

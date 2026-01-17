@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/env"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -73,6 +74,8 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+
+	env.Init(bc.Application.Env)
 
 	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Application, logger)
 	if err != nil {
