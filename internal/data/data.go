@@ -7,6 +7,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data/model"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/data/query"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/idgen"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/idgen/snowflake"
 	"gorm.io/driver/mysql"
@@ -157,6 +158,47 @@ func NewRedis(c *conf.Data, l log.Logger) *redis.Client {
 	}
 
 	return rdb
+}
+
+// contextTxKey 事务在 Context 中的 Key
+type contextTxKey struct{}
+
+// InTx 事务包装器实现 (biz.Transaction 接口)
+func (d *Data) InTx(ctx context.Context, fn func(ctx context.Context) error) error {
+	return d.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// 将事务对象注入 Context
+		ctx = context.WithValue(ctx, contextTxKey{}, tx)
+		return fn(ctx)
+	})
+}
+
+// getDB 内部私有方法：处理事务判断
+func (d *Data) getDB(ctx context.Context) *gorm.DB {
+	tx, ok := ctx.Value(contextTxKey{}).(*gorm.DB)
+	if ok {
+		return tx
+	}
+	return d.db.WithContext(ctx)
+}
+
+// DB 返回原始 GORM 实例（支持事务）
+func (d *Data) DB(ctx context.Context) *gorm.DB {
+	return d.getDB(ctx)
+}
+
+// Q 返回 GORM Gen 类型安全查询实例（支持事务）
+func (d *Data) Q(ctx context.Context) *query.Query {
+	db := d.db
+	tx, ok := ctx.Value(contextTxKey{}).(*gorm.DB)
+	if ok {
+		db = tx
+	}
+	return query.Use(db.WithContext(ctx))
+}
+
+// RDB 返回 Redis 客户端
+func (d *Data) RDB() *redis.Client {
+	return d.rdb
 }
 
 // NewIDGenerator 初始化 ID 生成器
