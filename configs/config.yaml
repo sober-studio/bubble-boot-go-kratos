@@ -15,10 +15,10 @@ data:
     database: 0
     read_timeout: 0.2s
     write_timeout: 0.2s
-application:
+app:
   env: ${ENV:prod}
   worker_id: ${NODE_ID:1}
-  authentication:
+  auth:
     public_paths:
       - /api.passport.v1.Passport/Register
       - /api.passport.v1.Passport/LoginByPassword

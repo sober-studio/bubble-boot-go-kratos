@@ -75,9 +75,9 @@ func main() {
 		panic(err)
 	}
 
-	env.Init(bc.Application.Env)
+	env.Init(bc.App.Env)
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Application, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.App, logger)
 	if err != nil {
 		panic(err)
 	}

@@ -17,7 +17,7 @@ import (
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(
 	c *conf.Server,
-	app *conf.Application,
+	app *conf.App,
 	public *service.PublicService,
 	passport *service.PassportService,
 	tokenService auth.TokenService,
@@ -27,7 +27,7 @@ func NewHTTPServer(
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
-			auth.Middleware(tokenService, auth.PathAccessConfigWithPublicList(app.Authentication.PublicPaths)),
+			auth.Middleware(tokenService, auth.PathAccessConfigWithPublicList(app.Auth.PublicPaths)),
 		),
 		http.Filter(debug.Filter),
 		http.ResponseEncoder(render.ResponseEncoder),

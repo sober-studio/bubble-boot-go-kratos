@@ -8,7 +8,7 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  Application application = 3;
+  App app = 3;
 }
 
 message Server {
@@ -48,8 +48,8 @@ message Data {
   Redis redis = 2;
 }
 
-message Application {
-  message Authentication {
+message App {
+  message Auth {
     message Passport {
       bool auto_register = 1;
     }
@@ -62,7 +62,7 @@ message Application {
     Passport passport = 2;
     JWT jwt = 3;
   }
-  Authentication authentication = 1;
+  Auth auth = 1;
   string env = 2;
   int64 worker_id = 3;
 }

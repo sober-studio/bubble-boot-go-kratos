@@ -26,7 +26,7 @@ type Bootstrap struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Server        *Server                `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
 	Data          *Data                  `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	Application   *Application           `protobuf:"bytes,3,opt,name=application,proto3" json:"application,omitempty"`
+	App           *App                   `protobuf:"bytes,3,opt,name=app,proto3" json:"app,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -75,9 +75,9 @@ func (x *Bootstrap) GetData() *Data {
 	return nil
 }
 
-func (x *Bootstrap) GetApplication() *Application {
+func (x *Bootstrap) GetApp() *App {
 	if x != nil {
-		return x.Application
+		return x.App
 	}
 	return nil
 }
@@ -186,29 +186,29 @@ func (x *Data) GetRedis() *Data_Redis {
 	return nil
 }
 
-type Application struct {
-	state          protoimpl.MessageState      `protogen:"open.v1"`
-	Authentication *Application_Authentication `protobuf:"bytes,1,opt,name=authentication,proto3" json:"authentication,omitempty"`
-	Env            string                      `protobuf:"bytes,2,opt,name=env,proto3" json:"env,omitempty"`
-	WorkerId       int64                       `protobuf:"varint,3,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+type App struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Auth          *App_Auth              `protobuf:"bytes,1,opt,name=auth,proto3" json:"auth,omitempty"`
+	Env           string                 `protobuf:"bytes,2,opt,name=env,proto3" json:"env,omitempty"`
+	WorkerId      int64                  `protobuf:"varint,3,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Application) Reset() {
-	*x = Application{}
+func (x *App) Reset() {
+	*x = App{}
 	mi := &file_conf_conf_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Application) String() string {
+func (x *App) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Application) ProtoMessage() {}
+func (*App) ProtoMessage() {}
 
-func (x *Application) ProtoReflect() protoreflect.Message {
+func (x *App) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -220,26 +220,26 @@ func (x *Application) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Application.ProtoReflect.Descriptor instead.
-func (*Application) Descriptor() ([]byte, []int) {
+// Deprecated: Use App.ProtoReflect.Descriptor instead.
+func (*App) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Application) GetAuthentication() *Application_Authentication {
+func (x *App) GetAuth() *App_Auth {
 	if x != nil {
-		return x.Authentication
+		return x.Auth
 	}
 	return nil
 }
 
-func (x *Application) GetEnv() string {
+func (x *App) GetEnv() string {
 	if x != nil {
 		return x.Env
 	}
 	return ""
 }
 
-func (x *Application) GetWorkerId() int64 {
+func (x *App) GetWorkerId() int64 {
 	if x != nil {
 		return x.WorkerId
 	}
@@ -528,29 +528,29 @@ func (x *Data_Redis) GetPoolSize() int32 {
 	return 0
 }
 
-type Application_Authentication struct {
-	state         protoimpl.MessageState               `protogen:"open.v1"`
-	PublicPaths   []string                             `protobuf:"bytes,1,rep,name=public_paths,json=publicPaths,proto3" json:"public_paths,omitempty"`
-	Passport      *Application_Authentication_Passport `protobuf:"bytes,2,opt,name=passport,proto3" json:"passport,omitempty"`
-	Jwt           *Application_Authentication_JWT      `protobuf:"bytes,3,opt,name=jwt,proto3" json:"jwt,omitempty"`
+type App_Auth struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PublicPaths   []string               `protobuf:"bytes,1,rep,name=public_paths,json=publicPaths,proto3" json:"public_paths,omitempty"`
+	Passport      *App_Auth_Passport     `protobuf:"bytes,2,opt,name=passport,proto3" json:"passport,omitempty"`
+	Jwt           *App_Auth_JWT          `protobuf:"bytes,3,opt,name=jwt,proto3" json:"jwt,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Application_Authentication) Reset() {
-	*x = Application_Authentication{}
+func (x *App_Auth) Reset() {
+	*x = App_Auth{}
 	mi := &file_conf_conf_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Application_Authentication) String() string {
+func (x *App_Auth) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Application_Authentication) ProtoMessage() {}
+func (*App_Auth) ProtoMessage() {}
 
-func (x *Application_Authentication) ProtoReflect() protoreflect.Message {
+func (x *App_Auth) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -562,53 +562,53 @@ func (x *Application_Authentication) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Application_Authentication.ProtoReflect.Descriptor instead.
-func (*Application_Authentication) Descriptor() ([]byte, []int) {
+// Deprecated: Use App_Auth.ProtoReflect.Descriptor instead.
+func (*App_Auth) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0}
 }
 
-func (x *Application_Authentication) GetPublicPaths() []string {
+func (x *App_Auth) GetPublicPaths() []string {
 	if x != nil {
 		return x.PublicPaths
 	}
 	return nil
 }
 
-func (x *Application_Authentication) GetPassport() *Application_Authentication_Passport {
+func (x *App_Auth) GetPassport() *App_Auth_Passport {
 	if x != nil {
 		return x.Passport
 	}
 	return nil
 }
 
-func (x *Application_Authentication) GetJwt() *Application_Authentication_JWT {
+func (x *App_Auth) GetJwt() *App_Auth_JWT {
 	if x != nil {
 		return x.Jwt
 	}
 	return nil
 }
 
-type Application_Authentication_Passport struct {
+type App_Auth_Passport struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AutoRegister  bool                   `protobuf:"varint,1,opt,name=auto_register,json=autoRegister,proto3" json:"auto_register,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Application_Authentication_Passport) Reset() {
-	*x = Application_Authentication_Passport{}
+func (x *App_Auth_Passport) Reset() {
+	*x = App_Auth_Passport{}
 	mi := &file_conf_conf_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Application_Authentication_Passport) String() string {
+func (x *App_Auth_Passport) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Application_Authentication_Passport) ProtoMessage() {}
+func (*App_Auth_Passport) ProtoMessage() {}
 
-func (x *Application_Authentication_Passport) ProtoReflect() protoreflect.Message {
+func (x *App_Auth_Passport) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -620,19 +620,19 @@ func (x *Application_Authentication_Passport) ProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Application_Authentication_Passport.ProtoReflect.Descriptor instead.
-func (*Application_Authentication_Passport) Descriptor() ([]byte, []int) {
+// Deprecated: Use App_Auth_Passport.ProtoReflect.Descriptor instead.
+func (*App_Auth_Passport) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0, 0}
 }
 
-func (x *Application_Authentication_Passport) GetAutoRegister() bool {
+func (x *App_Auth_Passport) GetAutoRegister() bool {
 	if x != nil {
 		return x.AutoRegister
 	}
 	return false
 }
 
-type Application_Authentication_JWT struct {
+type App_Auth_JWT struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Secret        string                 `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	Store         string                 `protobuf:"bytes,2,opt,name=store,proto3" json:"store,omitempty"`
@@ -641,20 +641,20 @@ type Application_Authentication_JWT struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Application_Authentication_JWT) Reset() {
-	*x = Application_Authentication_JWT{}
+func (x *App_Auth_JWT) Reset() {
+	*x = App_Auth_JWT{}
 	mi := &file_conf_conf_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Application_Authentication_JWT) String() string {
+func (x *App_Auth_JWT) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Application_Authentication_JWT) ProtoMessage() {}
+func (*App_Auth_JWT) ProtoMessage() {}
 
-func (x *Application_Authentication_JWT) ProtoReflect() protoreflect.Message {
+func (x *App_Auth_JWT) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -666,26 +666,26 @@ func (x *Application_Authentication_JWT) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Application_Authentication_JWT.ProtoReflect.Descriptor instead.
-func (*Application_Authentication_JWT) Descriptor() ([]byte, []int) {
+// Deprecated: Use App_Auth_JWT.ProtoReflect.Descriptor instead.
+func (*App_Auth_JWT) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0, 1}
 }
 
-func (x *Application_Authentication_JWT) GetSecret() string {
+func (x *App_Auth_JWT) GetSecret() string {
 	if x != nil {
 		return x.Secret
 	}
 	return ""
 }
 
-func (x *Application_Authentication_JWT) GetStore() string {
+func (x *App_Auth_JWT) GetStore() string {
 	if x != nil {
 		return x.Store
 	}
 	return ""
 }
 
-func (x *Application_Authentication_JWT) GetExpire() int64 {
+func (x *App_Auth_JWT) GetExpire() int64 {
 	if x != nil {
 		return x.Expire
 	}
@@ -697,11 +697,11 @@ var File_conf_conf_proto protoreflect.FileDescriptor
 const file_conf_conf_proto_rawDesc = "" +
 	"\n" +
 	"\x0fconf/conf.proto\x12\n" +
-	"kratos.api\x1a\x1egoogle/protobuf/duration.proto\"\x98\x01\n" +
+	"kratos.api\x1a\x1egoogle/protobuf/duration.proto\"\x80\x01\n" +
 	"\tBootstrap\x12*\n" +
 	"\x06server\x18\x01 \x01(\v2\x12.kratos.api.ServerR\x06server\x12$\n" +
-	"\x04data\x18\x02 \x01(\v2\x10.kratos.api.DataR\x04data\x129\n" +
-	"\vapplication\x18\x03 \x01(\v2\x17.kratos.api.ApplicationR\vapplication\"\xb8\x02\n" +
+	"\x04data\x18\x02 \x01(\v2\x10.kratos.api.DataR\x04data\x12!\n" +
+	"\x03app\x18\x03 \x01(\v2\x0f.kratos.api.AppR\x03app\"\xb8\x02\n" +
 	"\x06Server\x12+\n" +
 	"\x04http\x18\x01 \x01(\v2\x17.kratos.api.Server.HTTPR\x04http\x12+\n" +
 	"\x04grpc\x18\x02 \x01(\v2\x17.kratos.api.Server.GRPCR\x04grpc\x1ai\n" +
@@ -728,15 +728,15 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\rwrite_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x12\x1a\n" +
 	"\bpassword\x18\x06 \x01(\tR\bpassword\x12\x1a\n" +
 	"\bdatabase\x18\a \x01(\x05R\bdatabase\x12\x1b\n" +
-	"\tpool_size\x18\b \x01(\x05R\bpoolSize\"\xcb\x03\n" +
-	"\vApplication\x12N\n" +
-	"\x0eauthentication\x18\x01 \x01(\v2&.kratos.api.Application.AuthenticationR\x0eauthentication\x12\x10\n" +
+	"\tpool_size\x18\b \x01(\x05R\bpoolSize\"\xef\x02\n" +
+	"\x03App\x12(\n" +
+	"\x04auth\x18\x01 \x01(\v2\x14.kratos.api.App.AuthR\x04auth\x12\x10\n" +
 	"\x03env\x18\x02 \x01(\tR\x03env\x12\x1b\n" +
-	"\tworker_id\x18\x03 \x01(\x03R\bworkerId\x1a\xbc\x02\n" +
-	"\x0eAuthentication\x12!\n" +
-	"\fpublic_paths\x18\x01 \x03(\tR\vpublicPaths\x12K\n" +
-	"\bpassport\x18\x02 \x01(\v2/.kratos.api.Application.Authentication.PassportR\bpassport\x12<\n" +
-	"\x03jwt\x18\x03 \x01(\v2*.kratos.api.Application.Authentication.JWTR\x03jwt\x1a/\n" +
+	"\tworker_id\x18\x03 \x01(\x03R\bworkerId\x1a\x8e\x02\n" +
+	"\x04Auth\x12!\n" +
+	"\fpublic_paths\x18\x01 \x03(\tR\vpublicPaths\x129\n" +
+	"\bpassport\x18\x02 \x01(\v2\x1d.kratos.api.App.Auth.PassportR\bpassport\x12*\n" +
+	"\x03jwt\x18\x03 \x01(\v2\x18.kratos.api.App.Auth.JWTR\x03jwt\x1a/\n" +
 	"\bPassport\x12#\n" +
 	"\rauto_register\x18\x01 \x01(\bR\fautoRegister\x1aK\n" +
 	"\x03JWT\x12\x16\n" +
@@ -758,35 +758,35 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 
 var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_conf_conf_proto_goTypes = []any{
-	(*Bootstrap)(nil),                           // 0: kratos.api.Bootstrap
-	(*Server)(nil),                              // 1: kratos.api.Server
-	(*Data)(nil),                                // 2: kratos.api.Data
-	(*Application)(nil),                         // 3: kratos.api.Application
-	(*Server_HTTP)(nil),                         // 4: kratos.api.Server.HTTP
-	(*Server_GRPC)(nil),                         // 5: kratos.api.Server.GRPC
-	(*Data_Database)(nil),                       // 6: kratos.api.Data.Database
-	(*Data_Redis)(nil),                          // 7: kratos.api.Data.Redis
-	(*Application_Authentication)(nil),          // 8: kratos.api.Application.Authentication
-	(*Application_Authentication_Passport)(nil), // 9: kratos.api.Application.Authentication.Passport
-	(*Application_Authentication_JWT)(nil),      // 10: kratos.api.Application.Authentication.JWT
-	(*durationpb.Duration)(nil),                 // 11: google.protobuf.Duration
+	(*Bootstrap)(nil),           // 0: kratos.api.Bootstrap
+	(*Server)(nil),              // 1: kratos.api.Server
+	(*Data)(nil),                // 2: kratos.api.Data
+	(*App)(nil),                 // 3: kratos.api.App
+	(*Server_HTTP)(nil),         // 4: kratos.api.Server.HTTP
+	(*Server_GRPC)(nil),         // 5: kratos.api.Server.GRPC
+	(*Data_Database)(nil),       // 6: kratos.api.Data.Database
+	(*Data_Redis)(nil),          // 7: kratos.api.Data.Redis
+	(*App_Auth)(nil),            // 8: kratos.api.App.Auth
+	(*App_Auth_Passport)(nil),   // 9: kratos.api.App.Auth.Passport
+	(*App_Auth_JWT)(nil),        // 10: kratos.api.App.Auth.JWT
+	(*durationpb.Duration)(nil), // 11: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.Bootstrap.server:type_name -> kratos.api.Server
 	2,  // 1: kratos.api.Bootstrap.data:type_name -> kratos.api.Data
-	3,  // 2: kratos.api.Bootstrap.application:type_name -> kratos.api.Application
+	3,  // 2: kratos.api.Bootstrap.app:type_name -> kratos.api.App
 	4,  // 3: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
 	5,  // 4: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
 	6,  // 5: kratos.api.Data.database:type_name -> kratos.api.Data.Database
 	7,  // 6: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
-	8,  // 7: kratos.api.Application.authentication:type_name -> kratos.api.Application.Authentication
+	8,  // 7: kratos.api.App.auth:type_name -> kratos.api.App.Auth
 	11, // 8: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
 	11, // 9: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
 	11, // 10: kratos.api.Data.Database.conn_max_lifetime:type_name -> google.protobuf.Duration
 	11, // 11: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
 	11, // 12: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	9,  // 13: kratos.api.Application.Authentication.passport:type_name -> kratos.api.Application.Authentication.Passport
-	10, // 14: kratos.api.Application.Authentication.jwt:type_name -> kratos.api.Application.Authentication.JWT
+	9,  // 13: kratos.api.App.Auth.passport:type_name -> kratos.api.App.Auth.Passport
+	10, // 14: kratos.api.App.Auth.jwt:type_name -> kratos.api.App.Auth.JWT
 	15, // [15:15] is the sub-list for method output_type
 	15, // [15:15] is the sub-list for method input_type
 	15, // [15:15] is the sub-list for extension type_name

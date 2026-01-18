@@ -205,7 +205,7 @@ func (d *Data) RDB() *redis.Client {
 }
 
 // NewIDGenerator 初始化 ID 生成器
-func NewIDGenerator(app *conf.Application) idgen.IDGenerator {
+func NewIDGenerator(app *conf.App) idgen.IDGenerator {
 	g := snowflake.NewSnowflake(app.WorkerId)
 	model.SetIDGenerator(g)
 	return g
