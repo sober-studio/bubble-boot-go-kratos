@@ -22,7 +22,7 @@ func wireApp(*conf.Server, *conf.Data, *conf.App, log.Logger) (*kratos.App, func
 	panic(wire.Build(
 		server.ProviderSet,
 		data.ProviderSet,
-		//biz.ProviderSet,
+		biz.ProviderSet,
 		auth.ProviderSet,
 		service.ProviderSet, newApp))
 }

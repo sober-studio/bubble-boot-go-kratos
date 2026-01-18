@@ -7,7 +7,9 @@ import (
 )
 
 // ProviderSet is biz providers.
-var ProviderSet = wire.NewSet()
+var ProviderSet = wire.NewSet(
+	NewCaptchaUseCase,
+)
 
 // Transaction 事务接口
 type Transaction interface {
