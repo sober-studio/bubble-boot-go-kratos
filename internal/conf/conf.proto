@@ -44,8 +44,28 @@ message Data {
     int32 database = 7;
     int32 pool_size = 8;
   }
+  message Sms {
+    string provider = 1; // aliyun, tencent
+    map<string, string> template_mapping = 2; // "otp_login" -> "SMS_123"
+    string access_key = 3;
+    string access_secret = 4;
+    string sign_name = 5;
+  }
+  message Email {
+    message SMTP {
+      string host = 1;
+      int32 port = 2;
+      string username = 3;
+      string password = 4;
+    }
+    string from = 1;
+    SMTP smtp = 2;
+    map<string, string> subject_mapping = 3;  // "otp_bind" -> "绑定验证码"
+  }
   Database database = 1;
   Redis redis = 2;
+  Sms sms = 3;
+  Email email = 4;
 }
 
 message App {
@@ -62,7 +82,18 @@ message App {
     Passport passport = 2;
     JWT jwt = 3;
   }
+  message Otp {
+    message Scene {
+      google.protobuf.Duration expires_in = 1;      // 有效期(秒)
+      google.protobuf.Duration resend_interval = 2; // 重发间隔(秒)
+      string template_name = 3;  // 业务逻辑模板名
+      int32 code_length = 4; // 验证码长度
+    }
+    map<string, Scene> phone_scenes = 1; // 手机号场景
+    map<string, Scene> email_scenes = 2; // 邮箱场景
+  }
   Auth auth = 1;
   string env = 2;
   int64 worker_id = 3;
+  Otp otp = 4;
 }

@@ -20,8 +20,10 @@ type PathAccessConfig struct {
 // NewDefaultPathAccessConfig 创建默认路径访问配置
 func NewDefaultPathAccessConfig() *PathAccessConfig {
 	return &PathAccessConfig{
-		PublicPaths: map[string]struct{}{},
-		AuthPaths:   map[string]struct{}{
+		PublicPaths: map[string]struct{}{
+			"": {},
+		},
+		AuthPaths: map[string]struct{}{
 			// 目前暂不判断，除公开接口列表中的路径外，均需要认证
 		},
 	}

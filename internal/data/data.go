@@ -23,8 +23,13 @@ import (
 var ProviderSet = wire.NewSet(
 	NewData,
 	NewRedis,
+	// ID Generator
 	NewIDGenerator,
+	// CAPTCHA 缓存
 	NewRedisCaptchaStore,
+	// OTP 缓存
+	NewRedisOtpCache,
+	// 数据库事务
 	wire.Bind(new(biz.Transaction), new(*Data)),
 )
 

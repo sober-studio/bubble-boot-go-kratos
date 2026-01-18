@@ -9,6 +9,7 @@ import (
 // ProviderSet is biz providers.
 var ProviderSet = wire.NewSet(
 	NewCaptchaUseCase,
+	NewOtpUseCase,
 )
 
 // Transaction 事务接口

@@ -21,8 +21,12 @@ import (
 func wireApp(*conf.Server, *conf.Data, *conf.App, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		server.ProviderSet,
+		service.ProviderSet,
+		//biz.ProviderSet,
 		data.ProviderSet,
-		biz.ProviderSet,
 		auth.ProviderSet,
-		service.ProviderSet, newApp))
+		//sms.ProviderSet,
+		//email.ProviderSet,
+		newApp,
+	))
 }

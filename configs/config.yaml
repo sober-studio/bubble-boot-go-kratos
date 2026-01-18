@@ -15,6 +15,30 @@ data:
     database: 0
     read_timeout: 0.2s
     write_timeout: 0.2s
+  # 短信供应商细节
+  sms:
+    provider: "aliyun" # 仅在 app.env 为 prod 时生效
+    access_key: "LTAI5tXXXXXX"
+    access_secret: "XXXXXXXXXXXX"
+    sign_name: "SOME_SIGN_NAME"
+    # 逻辑模板名 -> 供应商真实的模板 ID 映射
+    template_mapping:
+      "otp_reg": "SMS_10000001"
+      "otp_login": "SMS_10000002"
+      "otp_common": "SMS_10000003"
+
+  # 邮件供应商细节
+  email:
+    from: abc@demo.com
+    smtp:
+      host: "smtp.qiye.aliyun.com"
+      port: 465
+      username: "no-reply@yourdomain.com"
+      password: "your_password"
+    # 逻辑模板名 -> 邮件标题映射
+    subject_mapping:
+      "email_bind": "【XX系统】绑定邮箱验证码"
+      "email_reset": "【XX系统】重置密码身份验证"
 app:
   env: ${ENV:prod}
   worker_id: ${NODE_ID:1}
@@ -29,5 +53,36 @@ app:
       auto_register: true # 手机验证码登录时自动注册
     jwt:
       secret: dffdbc4da2d152c578a40a6071c131ff2673c82fafe00e4502719d8371e9da3a
-      store: redis # 存储方式 memory/redis
-      expire: 30 # token过期时间（天）
+      store: redis # 存储方式 redis
+      expire: 30 # token 过期时间（天）
+  otp:
+    # 手机号场景：注册、登录、修改绑定
+    phone_scenes:
+      register:
+        expires_in: 300s       # 5分钟有效
+        resend_interval: 60s   # 1分钟后可重发
+        template_name: "otp_reg"
+        code_length: 6
+      login:
+        expires_in: 300s
+        resend_interval: 60s
+        template_name: "otp_login"
+        code_length: 6
+      change_phone:
+        expires_in: 300s
+        resend_interval: 120s  # 敏感操作，重发间隔设长一点
+        template_name: "otp_common"
+        code_length: 6
+
+    # 邮箱场景：绑定邮箱、找回密码
+    email_scenes:
+      bind_email:
+        expires_in: 600s       # 邮件通常有效期长一点：10分钟
+        resend_interval: 60s
+        template_name: "email_bind"
+        code_length: 6
+      reset_pwd:
+        expires_in: 600s
+        resend_interval: 60s
+        template_name: "email_reset"
+        code_length: 6
