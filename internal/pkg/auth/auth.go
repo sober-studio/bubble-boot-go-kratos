@@ -35,7 +35,7 @@ type TokenService interface {
 	GetUserIDFromContext(ctx context.Context) (int64, error)
 	// GetUserTokens 获取用户令牌
 	GetUserTokens(ctx context.Context, userID string) (*[]model.UserToken, error)
-	// RevokeToken 撤销令牌
+	// RevokeToken 撤销令牌，如果 jti 为空，则从 context 中获取当前 token 的 jti
 	RevokeToken(ctx context.Context, jti string) error
 	// RevokeAllTokens 撤销用户所有令牌
 	RevokeAllTokens(ctx context.Context) error
@@ -159,10 +159,21 @@ func parseUserID(storedUserID string) (int64, error) {
 }
 
 func (s *JWTTokenService) RevokeToken(ctx context.Context, jti string) error {
-	userID, err := s.ParseTokenFromContext(ctx)
-	if err != nil {
-		return err
+	claims, ok := jwt.FromContext(ctx)
+	if !ok {
+		return ErrInvalidToken
 	}
+	registeredClaims, ok := claims.(*jwtv5.RegisteredClaims)
+	if !ok {
+		return ErrInvalidToken
+	}
+	userID := registeredClaims.Subject
+
+	// 如果 jti 为空，则撤销当前 token
+	if jti == "" {
+		jti = registeredClaims.ID
+	}
+
 	return s.store.DeleteUserToken(ctx, userID, jti)
 }
 

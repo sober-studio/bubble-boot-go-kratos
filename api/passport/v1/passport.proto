@@ -189,18 +189,6 @@ message LoginByOtpRequest {
 		(validate.rules).string = {min_len: 4, max_len: 6},
 		(google.api.field_behavior) = REQUIRED
 	];
-	// 图形验证码ID
-	string captcha_id = 4 [
-		json_name = "captcha_id",
-		(openapi.v3.property) = { description: "图形验证码ID" },
-		(google.api.field_behavior) = REQUIRED
-	];
-	// 图形验证码
-	string captcha = 5 [
-		json_name = "captcha",
-		(openapi.v3.property) = { description: "图形验证码内容" },
-		(google.api.field_behavior) = REQUIRED
-	];
 }
 
 // ========== 登录响应 ==========

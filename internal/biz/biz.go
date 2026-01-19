@@ -16,6 +16,8 @@ var ProviderSet = wire.NewSet(
 	email.NewEmailSender,
 	wire.Bind(new(SmsSender), new(sms.Sender)),
 	wire.Bind(new(EmailSender), new(email.Sender)),
+	// domains
+	NewPassportUseCase,
 )
 
 // Transaction 事务接口

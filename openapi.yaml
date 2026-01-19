@@ -235,8 +235,6 @@ components:
         api.passport.v1.LoginByOtpRequest:
             required:
                 - code
-                - captcha_id
-                - captcha
             type: object
             properties:
                 mobile:
@@ -245,12 +243,6 @@ components:
                 code:
                     type: string
                     description: 验证码，4-6位字符
-                captcha_id:
-                    type: string
-                    description: 图形验证码ID
-                captcha:
-                    type: string
-                    description: 图形验证码内容
             description: ========== 验证码登录 ==========
         api.passport.v1.LoginByPasswordRequest:
             required:

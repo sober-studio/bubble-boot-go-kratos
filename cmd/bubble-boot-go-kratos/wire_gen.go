@@ -41,9 +41,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger
 	otpCache := data.NewRedisOtpCache(dataData)
 	otpUseCase := biz.NewOtpUseCase(sender, emailSender, otpCache, app, logger)
 	publicService := service.NewPublicService(captchaUseCase, otpUseCase, logger)
-	passportService := service.NewPassportService()
 	tokenStore := auth.NewTokenStore(app, client)
 	tokenService := auth.NewTokenService(app, tokenStore)
+	userRepo := data.NewUserRepo(dataData, logger)
+	passportUseCase := biz.NewPassportUseCase(tokenService, userRepo, logger)
+	passportService := service.NewPassportService(passportUseCase, otpUseCase, captchaUseCase)
 	httpServer := server.NewHTTPServer(confServer, app, publicService, passportService, tokenService, logger)
 	kratosApp := newApp(logger, grpcServer, httpServer)
 	return kratosApp, func() {

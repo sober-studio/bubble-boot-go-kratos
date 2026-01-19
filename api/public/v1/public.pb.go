@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.33.2
-// source: public/v1/public.proto
+// source: api/public/v1/public.proto
 
 package v1
 
@@ -70,11 +70,11 @@ func (x SmsOtpScene) String() string {
 }
 
 func (SmsOtpScene) Descriptor() protoreflect.EnumDescriptor {
-	return file_public_v1_public_proto_enumTypes[0].Descriptor()
+	return file_api_public_v1_public_proto_enumTypes[0].Descriptor()
 }
 
 func (SmsOtpScene) Type() protoreflect.EnumType {
-	return &file_public_v1_public_proto_enumTypes[0]
+	return &file_api_public_v1_public_proto_enumTypes[0]
 }
 
 func (x SmsOtpScene) Number() protoreflect.EnumNumber {
@@ -83,7 +83,7 @@ func (x SmsOtpScene) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SmsOtpScene.Descriptor instead.
 func (SmsOtpScene) EnumDescriptor() ([]byte, []int) {
-	return file_public_v1_public_proto_rawDescGZIP(), []int{0}
+	return file_api_public_v1_public_proto_rawDescGZIP(), []int{0}
 }
 
 // ========== 获取图形验证码 ==========
@@ -95,7 +95,7 @@ type GetCaptchaRequest struct {
 
 func (x *GetCaptchaRequest) Reset() {
 	*x = GetCaptchaRequest{}
-	mi := &file_public_v1_public_proto_msgTypes[0]
+	mi := &file_api_public_v1_public_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -107,7 +107,7 @@ func (x *GetCaptchaRequest) String() string {
 func (*GetCaptchaRequest) ProtoMessage() {}
 
 func (x *GetCaptchaRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_v1_public_proto_msgTypes[0]
+	mi := &file_api_public_v1_public_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -120,7 +120,7 @@ func (x *GetCaptchaRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCaptchaRequest.ProtoReflect.Descriptor instead.
 func (*GetCaptchaRequest) Descriptor() ([]byte, []int) {
-	return file_public_v1_public_proto_rawDescGZIP(), []int{0}
+	return file_api_public_v1_public_proto_rawDescGZIP(), []int{0}
 }
 
 type GetCaptchaReply struct {
@@ -135,7 +135,7 @@ type GetCaptchaReply struct {
 
 func (x *GetCaptchaReply) Reset() {
 	*x = GetCaptchaReply{}
-	mi := &file_public_v1_public_proto_msgTypes[1]
+	mi := &file_api_public_v1_public_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -147,7 +147,7 @@ func (x *GetCaptchaReply) String() string {
 func (*GetCaptchaReply) ProtoMessage() {}
 
 func (x *GetCaptchaReply) ProtoReflect() protoreflect.Message {
-	mi := &file_public_v1_public_proto_msgTypes[1]
+	mi := &file_api_public_v1_public_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -160,7 +160,7 @@ func (x *GetCaptchaReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCaptchaReply.ProtoReflect.Descriptor instead.
 func (*GetCaptchaReply) Descriptor() ([]byte, []int) {
-	return file_public_v1_public_proto_rawDescGZIP(), []int{1}
+	return file_api_public_v1_public_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetCaptchaReply) GetCaptchaId() string {
@@ -193,7 +193,7 @@ type SendSmsOtpRequest struct {
 
 func (x *SendSmsOtpRequest) Reset() {
 	*x = SendSmsOtpRequest{}
-	mi := &file_public_v1_public_proto_msgTypes[2]
+	mi := &file_api_public_v1_public_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -205,7 +205,7 @@ func (x *SendSmsOtpRequest) String() string {
 func (*SendSmsOtpRequest) ProtoMessage() {}
 
 func (x *SendSmsOtpRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_v1_public_proto_msgTypes[2]
+	mi := &file_api_public_v1_public_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -218,7 +218,7 @@ func (x *SendSmsOtpRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendSmsOtpRequest.ProtoReflect.Descriptor instead.
 func (*SendSmsOtpRequest) Descriptor() ([]byte, []int) {
-	return file_public_v1_public_proto_rawDescGZIP(), []int{2}
+	return file_api_public_v1_public_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SendSmsOtpRequest) GetMobile() string {
@@ -259,7 +259,7 @@ type SendSmsOtpReply struct {
 
 func (x *SendSmsOtpReply) Reset() {
 	*x = SendSmsOtpReply{}
-	mi := &file_public_v1_public_proto_msgTypes[3]
+	mi := &file_api_public_v1_public_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -271,7 +271,7 @@ func (x *SendSmsOtpReply) String() string {
 func (*SendSmsOtpReply) ProtoMessage() {}
 
 func (x *SendSmsOtpReply) ProtoReflect() protoreflect.Message {
-	mi := &file_public_v1_public_proto_msgTypes[3]
+	mi := &file_api_public_v1_public_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -284,7 +284,7 @@ func (x *SendSmsOtpReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendSmsOtpReply.ProtoReflect.Descriptor instead.
 func (*SendSmsOtpReply) Descriptor() ([]byte, []int) {
-	return file_public_v1_public_proto_rawDescGZIP(), []int{3}
+	return file_api_public_v1_public_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SendSmsOtpReply) GetExpireAt() int64 {
@@ -294,11 +294,11 @@ func (x *SendSmsOtpReply) GetExpireAt() int64 {
 	return 0
 }
 
-var File_public_v1_public_proto protoreflect.FileDescriptor
+var File_api_public_v1_public_proto protoreflect.FileDescriptor
 
-const file_public_v1_public_proto_rawDesc = "" +
+const file_api_public_v1_public_proto_rawDesc = "" +
 	"\n" +
-	"\x16public/v1/public.proto\x12\rapi.public.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1copenapi/v3/annotations.proto\"\x13\n" +
+	"\x1aapi/public/v1/public.proto\x12\rapi.public.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1copenapi/v3/annotations.proto\"\x13\n" +
 	"\x11GetCaptchaRequest\"y\n" +
 	"\x0fGetCaptchaReply\x121\n" +
 	"\n" +
@@ -329,27 +329,27 @@ const file_public_v1_public_proto_rawDesc = "" +
 	"\rapi.public.v1P\x01Z>github.com/sober-studio/bubble-boot-go-kratos/api/public/v1;v1b\x06proto3"
 
 var (
-	file_public_v1_public_proto_rawDescOnce sync.Once
-	file_public_v1_public_proto_rawDescData []byte
+	file_api_public_v1_public_proto_rawDescOnce sync.Once
+	file_api_public_v1_public_proto_rawDescData []byte
 )
 
-func file_public_v1_public_proto_rawDescGZIP() []byte {
-	file_public_v1_public_proto_rawDescOnce.Do(func() {
-		file_public_v1_public_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_public_v1_public_proto_rawDesc), len(file_public_v1_public_proto_rawDesc)))
+func file_api_public_v1_public_proto_rawDescGZIP() []byte {
+	file_api_public_v1_public_proto_rawDescOnce.Do(func() {
+		file_api_public_v1_public_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_public_v1_public_proto_rawDesc), len(file_api_public_v1_public_proto_rawDesc)))
 	})
-	return file_public_v1_public_proto_rawDescData
+	return file_api_public_v1_public_proto_rawDescData
 }
 
-var file_public_v1_public_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_public_v1_public_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_public_v1_public_proto_goTypes = []any{
+var file_api_public_v1_public_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_api_public_v1_public_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_public_v1_public_proto_goTypes = []any{
 	(SmsOtpScene)(0),          // 0: api.public.v1.SmsOtpScene
 	(*GetCaptchaRequest)(nil), // 1: api.public.v1.GetCaptchaRequest
 	(*GetCaptchaReply)(nil),   // 2: api.public.v1.GetCaptchaReply
 	(*SendSmsOtpRequest)(nil), // 3: api.public.v1.SendSmsOtpRequest
 	(*SendSmsOtpReply)(nil),   // 4: api.public.v1.SendSmsOtpReply
 }
-var file_public_v1_public_proto_depIdxs = []int32{
+var file_api_public_v1_public_proto_depIdxs = []int32{
 	0, // 0: api.public.v1.SendSmsOtpRequest.scene:type_name -> api.public.v1.SmsOtpScene
 	1, // 1: api.public.v1.Public.GetCaptcha:input_type -> api.public.v1.GetCaptchaRequest
 	3, // 2: api.public.v1.Public.SendSmsOtp:input_type -> api.public.v1.SendSmsOtpRequest
@@ -362,27 +362,27 @@ var file_public_v1_public_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_public_v1_public_proto_init() }
-func file_public_v1_public_proto_init() {
-	if File_public_v1_public_proto != nil {
+func init() { file_api_public_v1_public_proto_init() }
+func file_api_public_v1_public_proto_init() {
+	if File_api_public_v1_public_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_v1_public_proto_rawDesc), len(file_public_v1_public_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_public_v1_public_proto_rawDesc), len(file_api_public_v1_public_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_public_v1_public_proto_goTypes,
-		DependencyIndexes: file_public_v1_public_proto_depIdxs,
-		EnumInfos:         file_public_v1_public_proto_enumTypes,
-		MessageInfos:      file_public_v1_public_proto_msgTypes,
+		GoTypes:           file_api_public_v1_public_proto_goTypes,
+		DependencyIndexes: file_api_public_v1_public_proto_depIdxs,
+		EnumInfos:         file_api_public_v1_public_proto_enumTypes,
+		MessageInfos:      file_api_public_v1_public_proto_msgTypes,
 	}.Build()
-	File_public_v1_public_proto = out.File
-	file_public_v1_public_proto_goTypes = nil
-	file_public_v1_public_proto_depIdxs = nil
+	File_api_public_v1_public_proto = out.File
+	file_api_public_v1_public_proto_goTypes = nil
+	file_api_public_v1_public_proto_depIdxs = nil
 }

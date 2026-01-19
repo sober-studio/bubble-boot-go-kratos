@@ -32,6 +32,8 @@ var ProviderSet = wire.NewSet(
 	NewRedisOtpCache,
 	// 数据库事务
 	wire.Bind(new(biz.Transaction), new(*Data)),
+	// 数据存储
+	NewUserRepo,
 )
 
 // Data .

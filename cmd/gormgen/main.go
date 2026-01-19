@@ -56,11 +56,8 @@ func main() {
 		FieldNullable: true,
 	})
 
-	// 注册 BaseModel，用于嵌入到生成的 Model 中
-	// FieldNew 用于添加新字段（这里添加匿名字段实现嵌入）
-	// FieldIgnore 用于忽略数据库表中的字段（因为已经通过 BaseModel 嵌入了）
 	baseModelOpt := []gen.ModelOpt{
-		gen.FieldNew("BaseModel", "BaseModel", field.Tag{
+		gen.FieldNew("", "BaseModel", field.Tag{
 			"gorm": "embedded",
 		}),
 		gen.FieldIgnore("id"),
