@@ -45,20 +45,22 @@ func NewSmtpSender(c *conf.Data_Email, logger log.Logger) Sender {
 }
 
 func (s *smtpSender) Send(ctx context.Context, target string, logicTemplate string, params map[string]string) error {
-	// 1. 独立渲染逻辑
+	subject, ok := s.conf.SubjectMapping[logicTemplate]
+	if !ok || subject == "" {
+		return ErrorTemplateNotConfigured
+	}
+
 	htmlBody, err := s.render(logicTemplate, params)
 	if err != nil {
 		return err
 	}
 
-	// 2. 构造邮件
 	m := gomail.NewMessage()
 	m.SetHeader("From", s.conf.From)
 	m.SetHeader("To", target)
-	m.SetHeader("Subject", s.conf.SubjectMapping[logicTemplate])
+	m.SetHeader("Subject", subject)
 	m.SetBody("text/html", htmlBody)
 
-	// 3. 带指数退避的重试发送逻辑
 	return s.sendWithRetry(ctx, m)
 }
 

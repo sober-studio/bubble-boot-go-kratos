@@ -51,13 +51,17 @@ func NewAliyunSender(c *conf.Data, logger log.Logger) Sender {
 }
 
 func (s *aliyunSender) Send(ctx context.Context, phone string, template string, params map[string]string) error {
-	TemplateCode := s.conf.TemplateMapping[template]
+	templateCode, ok := s.conf.TemplateMapping[template]
+	if !ok || templateCode == "" {
+		return ErrorTemplateNotConfigured
+	}
+
 	jsonParams, _ := json.Marshal(params)
 
 	request := &dysmsapi.SendSmsRequest{
 		PhoneNumbers:  tea.String(phone),
 		SignName:      tea.String(s.conf.SignName),
-		TemplateCode:  tea.String(TemplateCode),
+		TemplateCode:  tea.String(templateCode),
 		TemplateParam: tea.String(string(jsonParams)),
 	}
 
