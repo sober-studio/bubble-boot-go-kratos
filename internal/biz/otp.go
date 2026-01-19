@@ -2,8 +2,9 @@ package biz
 
 import (
 	"context"
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/errors"
@@ -132,11 +133,23 @@ func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCo
 
 // 生成验证码
 func (uc *OtpUseCase) generateCode(l int32) string {
+	if l <= 0 {
+		l = 6
+	}
+	if l > 10 {
+		l = 10
+	}
+
 	const digits = "0123456789"
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	b := make([]byte, l)
+
+	b := make([]byte, int(l))
 	for i := range b {
-		b[i] = digits[r.Intn(len(digits))]
+		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(digits))))
+		if err != nil {
+			b[i] = digits[0]
+			continue
+		}
+		b[i] = digits[n.Int64()]
 	}
 	return string(b)
 }
