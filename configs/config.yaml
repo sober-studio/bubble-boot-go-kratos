@@ -40,7 +40,7 @@ data:
       "email_bind": "【XX系统】绑定邮箱验证码"
       "email_reset": "【XX系统】重置密码身份验证"
 app:
-  env: ${ENV:prod}
+  env: ${ENV:dev}
   worker_id: ${NODE_ID:1}
   auth:
     public_paths:
