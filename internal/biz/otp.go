@@ -13,6 +13,11 @@ import (
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/debug"
 )
 
+const (
+	otpIntervalKeyPattern = "otp:interval:%s:%s:%s"
+	otpCodeKeyPattern     = "otp:code:%s:%s:%s"
+)
+
 var (
 	ErrorOtpSendError       = errors.InternalServer("OTP_SEND_ERROR", "发送验证码错误")
 	ErrorOtpSendTooFrequent = errors.BadRequest("OTP_SEND_TOO_FAST", "发送过于频繁，请稍后再试")
@@ -74,8 +79,8 @@ func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) err
 
 // 内部抽象流程
 func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string, cfg *conf.App_Otp_Scene, sendFn func(code string) error) error {
-	intervalKey := fmt.Sprintf("otp:interval:%s:%s:%s", kind, scene, receiver)
-	codeKey := fmt.Sprintf("opt:code:%s:%s:%s", kind, scene, receiver)
+	intervalKey := fmt.Sprintf(otpIntervalKeyPattern, kind, scene, receiver)
+	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
 	// 1. 限频校验
 	if exists, _ := uc.cache.Exists(ctx, intervalKey); exists {
 		return ErrorOtpSendTooFrequent
@@ -123,7 +128,7 @@ func (uc *OtpUseCase) VerifyEmailOtp(ctx context.Context, email, scene, code str
 
 // 内部通用校验逻辑
 func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCode string) (bool, error) {
-	codeKey := fmt.Sprintf("opt:code:%s:%s:%s", kind, scene, receiver)
+	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
 	stored, err := uc.cache.Get(ctx, codeKey)
 	if err != nil || stored != inputCode {
 		return false, ErrorOtpInvalid
