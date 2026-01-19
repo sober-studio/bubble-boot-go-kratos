@@ -30,7 +30,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger
 	grpcServer := server.NewGRPCServer(confServer, logger)
 	db := data.NewDB(confData, logger)
 	client := data.NewRedis(confData, logger)
-	dataData, cleanup, err := data.NewData(confData, logger, db, client)
+	idGenerator := data.NewIDGenerator(app)
+	dataData, cleanup, err := data.NewData(confData, logger, db, client, idGenerator)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -40,11 +41,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger
 	emailSender := email.NewEmailSender(confData, logger)
 	otpCache := data.NewRedisOtpCache(dataData)
 	otpUseCase := biz.NewOtpUseCase(sender, emailSender, otpCache, app, logger)
-	publicService := service.NewPublicService(captchaUseCase, otpUseCase, logger)
 	tokenStore := auth.NewTokenStore(app, client)
 	tokenService := auth.NewTokenService(app, tokenStore)
 	userRepo := data.NewUserRepo(dataData, logger)
-	passportUseCase := biz.NewPassportUseCase(tokenService, userRepo, logger)
+	passportUseCase := biz.NewPassportUseCase(tokenService, userRepo, app, logger)
+	publicService := service.NewPublicService(captchaUseCase, otpUseCase, passportUseCase, logger)
 	passportService := service.NewPassportService(passportUseCase, otpUseCase, captchaUseCase)
 	httpServer := server.NewHTTPServer(confServer, app, publicService, passportService, tokenService, logger)
 	kratosApp := newApp(logger, grpcServer, httpServer)

@@ -90,6 +90,36 @@ func (m *RegisterRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetMobile() != "" {
+
+		if !_RegisterRequest_Mobile_Pattern.MatchString(m.GetMobile()) {
+			err := RegisterRequestValidationError{
+				field:  "Mobile",
+				reason: "value does not match regex pattern \"^1[3-9]\\\\d{9}$\"",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.GetCode() != "" {
+
+		if l := utf8.RuneCountInString(m.GetCode()); l < 4 || l > 6 {
+			err := RegisterRequestValidationError{
+				field:  "Code",
+				reason: "value length must be between 4 and 6 runes, inclusive",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return RegisterRequestMultiError(errors)
 	}
@@ -167,6 +197,8 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = RegisterRequestValidationError{}
+
+var _RegisterRequest_Mobile_Pattern = regexp.MustCompile("^1[3-9]\\d{9}$")
 
 // Validate checks the field values on RegisterReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

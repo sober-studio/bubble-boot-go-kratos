@@ -33,8 +33,12 @@ type RegisterRequest struct {
 	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	// 确认密码，规则：6-20位字符
 	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirm_password,proto3" json:"confirm_password,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// 手机号，规则：11位数字，选填
+	Mobile string `protobuf:"bytes,4,opt,name=mobile,proto3" json:"mobile,omitempty"`
+	// 验证码，规则：4-6位字符，选填
+	Code          string `protobuf:"bytes,5,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RegisterRequest) Reset() {
@@ -84,6 +88,20 @@ func (x *RegisterRequest) GetPassword() string {
 func (x *RegisterRequest) GetConfirmPassword() string {
 	if x != nil {
 		return x.ConfirmPassword
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetMobile() string {
+	if x != nil {
+		return x.Mobile
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetCode() string {
+	if x != nil {
+		return x.Code
 	}
 	return ""
 }
@@ -875,11 +893,13 @@ var File_api_passport_v1_passport_proto protoreflect.FileDescriptor
 
 const file_api_passport_v1_passport_proto_rawDesc = "" +
 	"\n" +
-	"\x1eapi/passport/v1/passport.proto\x12\x0fapi.passport.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1copenapi/v3/annotations.proto\"\xff\x01\n" +
+	"\x1eapi/passport/v1/passport.proto\x12\x0fapi.passport.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1copenapi/v3/annotations.proto\"\xa7\x03\n" +
 	"\x0fRegisterRequest\x12H\n" +
 	"\busername\x18\x01 \x01(\tB,\xe2A\x01\x02\xfaB\x06r\x04\x10\x03\x18\x14\xbaG\x1c\x92\x02\x19用户名，3-20位字符R\busername\x12E\n" +
 	"\bpassword\x18\x02 \x01(\tB)\xe2A\x01\x02\xfaB\x06r\x04\x10\x06\x18\x14\xbaG\x19\x92\x02\x16密码，6-20位字符R\bpassword\x12[\n" +
-	"\x10confirm_password\x18\x03 \x01(\tB/\xe2A\x01\x02\xfaB\x06r\x04\x10\x06\x18\x14\xbaG\x1f\x92\x02\x1c确认密码，6-20位字符R\x10confirm_password\"9\n" +
+	"\x10confirm_password\x18\x03 \x01(\tB/\xe2A\x01\x02\xfaB\x06r\x04\x10\x06\x18\x14\xbaG\x1f\x92\x02\x1c确认密码，6-20位字符R\x10confirm_password\x12Y\n" +
+	"\x06mobile\x18\x04 \x01(\tBA\xe2A\x01\x01\xfaB\x14r\x122\r^1[3-9]\\d{9}$\xd0\x01\x01\xbaG#\x92\x02 手机号，11位数字，选填R\x06mobile\x12K\n" +
+	"\x04code\x18\x05 \x01(\tB7\xe2A\x01\x01\xfaB\tr\a\x10\x04\x18\x06\xd0\x01\x01\xbaG$\x92\x02!验证码，4-6位字符，选填R\x04code\"9\n" +
 	"\rRegisterReply\x12(\n" +
 	"\x05token\x18\x01 \x01(\tB\x12\xbaG\x0f\x92\x02\f登录凭证R\x05token\"\xa1\x02\n" +
 	"\x16LoginByPasswordRequest\x12H\n" +

@@ -3,7 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Passport API
     version: 0.0.1
 paths:
     /passport/bind-mobile:
@@ -17,7 +17,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.BindMobileRequest'
+                            $ref: '#/components/schemas/BindMobileRequest'
                 required: true
             responses:
                 "200":
@@ -25,7 +25,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.BindMobileReply'
+                                $ref: '#/components/schemas/BindMobileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/login/otp:
         post:
             tags:
@@ -37,7 +43,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.LoginByOtpRequest'
+                            $ref: '#/components/schemas/LoginByOtpRequest'
                 required: true
             responses:
                 "200":
@@ -45,7 +51,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.LoginReply'
+                                $ref: '#/components/schemas/LoginReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/login/password:
         post:
             tags:
@@ -57,7 +69,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.LoginByPasswordRequest'
+                            $ref: '#/components/schemas/LoginByPasswordRequest'
                 required: true
             responses:
                 "200":
@@ -65,7 +77,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.LoginReply'
+                                $ref: '#/components/schemas/LoginReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/logout:
         post:
             tags:
@@ -77,7 +95,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.LogoutRequest'
+                            $ref: '#/components/schemas/LogoutRequest'
                 required: true
             responses:
                 "200":
@@ -85,7 +103,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.LogoutReply'
+                                $ref: '#/components/schemas/LogoutReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/register:
         post:
             tags:
@@ -97,7 +121,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.RegisterRequest'
+                            $ref: '#/components/schemas/RegisterRequest'
                 required: true
             responses:
                 "200":
@@ -105,7 +129,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.RegisterReply'
+                                $ref: '#/components/schemas/RegisterReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/reset-password:
         post:
             tags:
@@ -117,7 +147,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.ResetPasswordRequest'
+                            $ref: '#/components/schemas/ResetPasswordRequest'
                 required: true
             responses:
                 "200":
@@ -125,7 +155,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.ResetPasswordReply'
+                                $ref: '#/components/schemas/ResetPasswordReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/update-mobile:
         post:
             tags:
@@ -137,7 +173,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.UpdateMobileRequest'
+                            $ref: '#/components/schemas/UpdateMobileRequest'
                 required: true
             responses:
                 "200":
@@ -145,7 +181,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.UpdateMobileReply'
+                                $ref: '#/components/schemas/UpdateMobileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/update-password:
         post:
             tags:
@@ -157,7 +199,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.passport.v1.UpdatePasswordRequest'
+                            $ref: '#/components/schemas/UpdatePasswordRequest'
                 required: true
             responses:
                 "200":
@@ -165,7 +207,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.UpdatePasswordReply'
+                                $ref: '#/components/schemas/UpdatePasswordReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /passport/user-info:
         get:
             tags:
@@ -179,47 +227,19 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.passport.v1.UserInfoReply'
-    /public/captcha:
-        get:
-            tags:
-                - Public
-            summary: 获取图形验证码
-            description: 获取图形验证码
-            operationId: Public_GetCaptcha
-            responses:
-                "200":
-                    description: OK
+                                $ref: '#/components/schemas/UserInfoReply'
+                default:
+                    description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.public.v1.GetCaptchaReply'
-    /public/otp/sms:
-        post:
-            tags:
-                - Public
-            summary: 获取短信验证码
-            description: 获取短信验证码
-            operationId: Public_SendSmsOtp
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.public.v1.SendSmsOtpRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.public.v1.SendSmsOtpReply'
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
-        api.passport.v1.BindMobileReply:
+        BindMobileReply:
             type: object
             properties: {}
-        api.passport.v1.BindMobileRequest:
+        BindMobileRequest:
             required:
                 - mobile
                 - code
@@ -232,7 +252,15 @@ components:
                     type: string
                     description: 验证码，4-6位字符
             description: ========== 绑定手机号 ==========
-        api.passport.v1.LoginByOtpRequest:
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        LoginByOtpRequest:
             required:
                 - code
             type: object
@@ -244,7 +272,7 @@ components:
                     type: string
                     description: 验证码，4-6位字符
             description: ========== 验证码登录 ==========
-        api.passport.v1.LoginByPasswordRequest:
+        LoginByPasswordRequest:
             required:
                 - username
                 - password
@@ -265,27 +293,27 @@ components:
                     type: string
                     description: 图形验证码内容
             description: ========== 密码登录 ==========
-        api.passport.v1.LoginReply:
+        LoginReply:
             type: object
             properties:
                 token:
                     type: string
                     description: 登录凭证
             description: ========== 登录响应 ==========
-        api.passport.v1.LogoutReply:
+        LogoutReply:
             type: object
             properties: {}
-        api.passport.v1.LogoutRequest:
+        LogoutRequest:
             type: object
             properties: {}
             description: ========== 用户退出 ==========
-        api.passport.v1.RegisterReply:
+        RegisterReply:
             type: object
             properties:
                 token:
                     type: string
                     description: 登录凭证
-        api.passport.v1.RegisterRequest:
+        RegisterRequest:
             required:
                 - username
                 - password
@@ -301,11 +329,17 @@ components:
                 confirm_password:
                     type: string
                     description: 确认密码，6-20位字符
+                mobile:
+                    type: string
+                    description: 手机号，11位数字，选填
+                code:
+                    type: string
+                    description: 验证码，4-6位字符，选填
             description: ========== 用户注册 ==========
-        api.passport.v1.ResetPasswordReply:
+        ResetPasswordReply:
             type: object
             properties: {}
-        api.passport.v1.ResetPasswordRequest:
+        ResetPasswordRequest:
             required:
                 - mobile
                 - sms_code
@@ -326,10 +360,26 @@ components:
                     type: string
                     description: 确认新密码，6-20位字符
             description: ========== 找回密码 ==========
-        api.passport.v1.UpdateMobileReply:
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateMobileReply:
             type: object
             properties: {}
-        api.passport.v1.UpdateMobileRequest:
+        UpdateMobileRequest:
             required:
                 - mobile
                 - code
@@ -342,10 +392,10 @@ components:
                     type: string
                     description: 验证码，4-6位字符
             description: ========== 修改绑定手机号 ==========
-        api.passport.v1.UpdatePasswordReply:
+        UpdatePasswordReply:
             type: object
             properties: {}
-        api.passport.v1.UpdatePasswordRequest:
+        UpdatePasswordRequest:
             required:
                 - old_password
                 - new_password
@@ -362,7 +412,7 @@ components:
                     type: string
                     description: 确认新密码，6-20位字符
             description: ========== 修改密码 ==========
-        api.passport.v1.UserInfoReply:
+        UserInfoReply:
             type: object
             properties:
                 username:
@@ -375,42 +425,5 @@ components:
                     type: integer
                     description: 状态：0=禁用，1=正常
                     format: int32
-        api.public.v1.GetCaptchaReply:
-            type: object
-            properties:
-                captcha_id:
-                    type: string
-                    description: 验证码id
-                image_b64:
-                    type: string
-                    description: 验证码内容
-        api.public.v1.SendSmsOtpReply:
-            type: object
-            properties:
-                expire_at:
-                    type: string
-                    description: 验证码过期时间戳，单位秒
-        api.public.v1.SendSmsOtpRequest:
-            required:
-                - mobile
-                - captcha_id
-                - captcha
-                - scene
-            type: object
-            properties:
-                mobile:
-                    type: string
-                    description: 手机号，11位数字
-                captcha_id:
-                    type: string
-                    description: 图形验证码ID
-                captcha:
-                    type: string
-                    description: 图形验证码内容
-                scene:
-                    type: integer
-                    description: 短信验证码业务场景
-                    format: enum
 tags:
     - name: Passport
-    - name: Public

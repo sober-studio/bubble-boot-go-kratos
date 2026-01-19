@@ -28,7 +28,17 @@ func (s *PassportService) Register(ctx context.Context, req *pb.RegisterRequest)
 		return nil, errors.BadRequest("PASSWORD_MISMATCH", "两次输入密码不一致")
 	}
 
-	token, err := s.uc.Register(ctx, req.Username, req.Password)
+	phone := ""
+	// 如果手机号和验证码都不为空，则进行验证码校验
+	if req.Mobile != "" && req.Code != "" {
+		// 校验短信验证码
+		if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, biz.Register, req.Code); err != nil || !valid {
+			return nil, biz.ErrorOtpInvalid
+		}
+		phone = req.Mobile
+	}
+
+	token, err := s.uc.Register(ctx, req.Username, req.Password, phone)
 	if err != nil {
 		return nil, err
 	}

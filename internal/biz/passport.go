@@ -8,6 +8,7 @@ import (
 
 	kerrors "github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -43,25 +44,35 @@ type UserRepo interface {
 type PassportUseCase struct {
 	auth auth.TokenService
 	user UserRepo
+	conf *conf.App_Auth_Passport
 	log  *log.Helper
 }
 
 func NewPassportUseCase(
 	auth auth.TokenService,
 	user UserRepo,
+	conf *conf.App,
 	logger log.Logger,
 ) *PassportUseCase {
 	return &PassportUseCase{
 		auth: auth,
 		user: user,
+		conf: conf.Auth.Passport,
 		log:  log.NewHelper(logger),
 	}
 }
 
-func (uc *PassportUseCase) Register(ctx context.Context, username, password string) (string, error) {
+func (uc *PassportUseCase) Register(ctx context.Context, username, password, phone string) (string, error) {
 	// 检查用户名是否存在
 	if u, _ := uc.user.GetUserByUsername(ctx, username); u != nil {
 		return "", ErrUserAlreadyExists
+	}
+
+	// 如果提供了手机号，检查手机号是否已被使用
+	if phone != "" {
+		if u, _ := uc.user.GetUserByPhone(ctx, phone); u != nil {
+			return "", ErrMobileAlreadyBound
+		}
 	}
 
 	// 密码加密
@@ -74,6 +85,9 @@ func (uc *PassportUseCase) Register(ctx context.Context, username, password stri
 		Username:     username,
 		PasswordHash: hash,
 		IsAvailable:  true,
+	}
+	if phone != "" {
+		user.Phone = phone
 	}
 
 	savedUser, err := uc.user.CreateUser(ctx, user)
@@ -90,9 +104,18 @@ func (uc *PassportUseCase) LoginByPassword(ctx context.Context, username, passwo
 	user, err := uc.user.GetUserByUsername(ctx, username)
 	if err != nil {
 		if errors.Is(err, ErrUserNotFound) {
-			return "", ErrUserNotFound
+			// 如果按用户名未找到，尝试按手机号查找
+			u, errPhone := uc.user.GetUserByPhone(ctx, username)
+			if errPhone != nil {
+				if errors.Is(errPhone, ErrUserNotFound) {
+					return "", ErrUserNotFound
+				}
+				return "", errPhone
+			}
+			user = u
+		} else {
+			return "", err
 		}
-		return "", err
 	}
 
 	// 校验密码
@@ -112,9 +135,25 @@ func (uc *PassportUseCase) LoginByOtp(ctx context.Context, phone string) (string
 	user, err := uc.user.GetUserByPhone(ctx, phone)
 	if err != nil {
 		if errors.Is(err, ErrUserNotFound) {
-			return "", ErrUserNotFound
+			// 如果配置了自动注册
+			if uc.conf != nil && uc.conf.AutoRegister {
+				// 创建新用户
+				newUser := &User{
+					Username:    phone, // 手机号作为用户名
+					Phone:       phone,
+					IsAvailable: true,
+				}
+				savedUser, createErr := uc.user.CreateUser(ctx, newUser)
+				if createErr != nil {
+					return "", createErr
+				}
+				user = savedUser
+			} else {
+				return "", ErrUserNotFound
+			}
+		} else {
+			return "", err
 		}
-		return "", err
 	}
 
 	if !user.IsAvailable {
@@ -193,6 +232,18 @@ func (uc *PassportUseCase) UpdateMobile(ctx context.Context, mobile string) erro
 	return uc.user.UpdatePhone(ctx, userId, mobile)
 }
 
+// CheckPhoneRegistered 检查手机号是否已注册
+func (uc *PassportUseCase) CheckPhoneRegistered(ctx context.Context, phone string) error {
+	_, err := uc.user.GetUserByPhone(ctx, phone)
+	if err != nil {
+		if errors.Is(err, ErrUserNotFound) {
+			return ErrUserNotFound
+		}
+		return err
+	}
+	return nil
+}
+
 func (uc *PassportUseCase) ResetPassword(ctx context.Context, mobile, newPassword string) error {
 	user, err := uc.user.GetUserByPhone(ctx, mobile)
 	if err != nil {
@@ -209,13 +260,10 @@ func (uc *PassportUseCase) ResetPassword(ctx context.Context, mobile, newPasswor
 	}
 
 	// 密码重置完成后，撤销用户所有的令牌
-	// 注意：这里需要通过 receiver 的 ID 来撤销，但 auth.RevokeAllTokens(ctx) 是针对当前登录用户的。
-	// 如果是找回密码，当前可能未登录。
-	// TokenService 应该支持通过 userID 撤销所有 Token。
-	// 暂时假设 RevokeAllTokens 能通过某些方式处理，或者找回密码后需要强制重新登录。
-	// 但通常找回密码是针对特定 userID 的。
-	// 我检查一下 auth.go
-	return uc.auth.RevokeAllTokens(ctx)
+	if err := uc.auth.RevokeAllTokensByUserID(ctx, user.ID); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (uc *PassportUseCase) hashPassword(password string) (string, error) {

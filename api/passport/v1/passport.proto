@@ -134,6 +134,20 @@ message RegisterRequest {
 		(validate.rules).string = {min_len: 6, max_len: 20},
 		(google.api.field_behavior) = REQUIRED
 	];
+	// 手机号，规则：11位数字，选填
+	string mobile = 4 [
+		json_name = "mobile",
+		(openapi.v3.property) = {description: "手机号，11位数字，选填"},
+		(validate.rules).string = {ignore_empty: true, pattern: "^1[3-9]\\d{9}$"},
+		(google.api.field_behavior) = OPTIONAL
+	];
+	// 验证码，规则：4-6位字符，选填
+	string code = 5 [
+		json_name = "code",
+		(openapi.v3.property) = { description: "验证码，4-6位字符，选填" },
+		(validate.rules).string = {ignore_empty: true, min_len: 4, max_len: 6},
+		(google.api.field_behavior) = OPTIONAL
+	];
 }
 
 message RegisterReply {

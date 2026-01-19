@@ -38,7 +38,7 @@ const (
 	// 绑定
 	SmsOtpScene_BIND SmsOtpScene = 3
 	// 忘记密码
-	SmsOtpScene_FORGET SmsOtpScene = 4
+	SmsOtpScene_RESET SmsOtpScene = 4
 )
 
 // Enum value maps for SmsOtpScene.
@@ -48,14 +48,14 @@ var (
 		1: "REGISTER",
 		2: "LOGIN",
 		3: "BIND",
-		4: "FORGET",
+		4: "RESET",
 	}
 	SmsOtpScene_value = map[string]int32{
 		"UNSPECIFIED": 0,
 		"REGISTER":    1,
 		"LOGIN":       2,
 		"BIND":        3,
-		"FORGET":      4,
+		"RESET":       4,
 	}
 )
 
@@ -304,23 +304,22 @@ const file_api_public_v1_public_proto_rawDesc = "" +
 	"\n" +
 	"captcha_id\x18\x01 \x01(\tB\x11\xbaG\x0e\x92\x02\v验证码idR\n" +
 	"captcha_id\x123\n" +
-	"\timage_b64\x18\x02 \x01(\tB\x15\xbaG\x12\x92\x02\x0f验证码内容R\timage_b64\"\xbd\x02\n" +
+	"\timage_b64\x18\x02 \x01(\tB\x15\xbaG\x12\x92\x02\x0f验证码内容R\timage_b64\"\xd9\x02\n" +
 	"\x11SendSmsOtpRequest\x12M\n" +
 	"\x06mobile\x18\x01 \x01(\tB5\xe2A\x01\x02\xfaB\x11r\x0f2\r^1[3-9]\\d{9}$\xbaG\x1a\x92\x02\x17手机号，11位数字R\x06mobile\x12;\n" +
 	"\n" +
 	"captcha_id\x18\x02 \x01(\tB\x1b\xe2A\x01\x02\xbaG\x14\x92\x02\x11图形验证码IDR\n" +
 	"captcha_id\x129\n" +
-	"\acaptcha\x18\x03 \x01(\tB\x1f\xe2A\x01\x02\xbaG\x18\x92\x02\x15图形验证码内容R\acaptcha\x12a\n" +
-	"\x05scene\x18\x04 \x01(\x0e2\x1a.api.public.v1.SmsOtpSceneB/\xe2A\x01\x02\xfaB\a\x82\x01\x04\x10\x01 \x00\xbaG\x1e\x92\x02\x1b短信验证码业务场景R\x05scene\"[\n" +
+	"\acaptcha\x18\x03 \x01(\tB\x1f\xe2A\x01\x02\xbaG\x18\x92\x02\x15图形验证码内容R\acaptcha\x12}\n" +
+	"\x05scene\x18\x04 \x01(\x0e2\x1a.api.public.v1.SmsOtpSceneBK\xe2A\x01\x02\xfaB\a\x82\x01\x04\x10\x01 \x00\xbaG:\x92\x027短信验证码业务场景：REGISTER/LOGIN/BIND/RESETR\x05scene\"[\n" +
 	"\x0fSendSmsOtpReply\x12H\n" +
-	"\texpire_at\x18\x01 \x01(\x03B*\xbaG'\x92\x02$验证码过期时间戳，单位秒R\texpire_at*M\n" +
+	"\texpire_at\x18\x01 \x01(\x03B*\xbaG'\x92\x02$验证码过期时间戳，单位秒R\texpire_at*L\n" +
 	"\vSmsOtpScene\x12\x0f\n" +
 	"\vUNSPECIFIED\x10\x00\x12\f\n" +
 	"\bREGISTER\x10\x01\x12\t\n" +
 	"\x05LOGIN\x10\x02\x12\b\n" +
-	"\x04BIND\x10\x03\x12\n" +
-	"\n" +
-	"\x06FORGET\x10\x042\x93\x02\n" +
+	"\x04BIND\x10\x03\x12\t\n" +
+	"\x05RESET\x10\x042\x93\x02\n" +
 	"\x06Public\x12\x81\x01\n" +
 	"\n" +
 	"GetCaptcha\x12 .api.public.v1.GetCaptchaRequest\x1a\x1e.api.public.v1.GetCaptchaReply\"1\xbaG\x17\x12\x15获取图形验证码\x82\xd3\xe4\x93\x02\x11\x12\x0f/public/captcha\x12\x84\x01\n" +

@@ -39,6 +39,8 @@ type TokenService interface {
 	RevokeToken(ctx context.Context, jti string) error
 	// RevokeAllTokens 撤销用户所有令牌
 	RevokeAllTokens(ctx context.Context) error
+	// RevokeAllTokensByUserID 根据用户ID撤销所有令牌
+	RevokeAllTokensByUserID(ctx context.Context, userID int64) error
 	// GetSecretKey 获取密钥
 	GetSecretKey() []byte
 }
@@ -183,6 +185,11 @@ func (s *JWTTokenService) RevokeAllTokens(ctx context.Context) error {
 		return err
 	}
 	return s.store.DeleteUserTokens(ctx, userID)
+}
+
+func (s *JWTTokenService) RevokeAllTokensByUserID(ctx context.Context, userID int64) error {
+	userIDStr := strconv.FormatInt(userID, 10)
+	return s.store.DeleteUserTokens(ctx, userIDStr)
 }
 
 func (s *JWTTokenService) GetSecretKey() []byte {

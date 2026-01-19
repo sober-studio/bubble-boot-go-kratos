@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.0
 // - protoc             v6.33.2
-// source: passport/v1/passport.proto
+// source: api/passport/v1/passport.proto
 
 package v1
 
@@ -439,5 +439,5 @@ var Passport_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "passport/v1/passport.proto",
+	Metadata: "api/passport/v1/passport.proto",
 }
