@@ -72,11 +72,6 @@ func (uc *OtpUseCase) SendPhoneOtp(ctx context.Context, phone, scene string) (in
 		return 0, ErrorSceneNotFound
 	}
 
-	kind := kindPhone
-	// 发新验证码前清理上一轮的失败计数
-	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, phone)
-	_ = uc.cache.Del(ctx, failKey)
-
 	return uc.process(ctx, kindPhone, scene, phone, cfg, func(code string) error {
 		return uc.sms.Send(ctx, phone, cfg.TemplateName, map[string]string{"code": code})
 	})
@@ -88,11 +83,6 @@ func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) (in
 	if !ok {
 		return 0, ErrorSceneNotFound
 	}
-
-	kind := kindEmail
-	// 发新验证码前清理上一轮的失败计数
-	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, email)
-	_ = uc.cache.Del(ctx, failKey)
 
 	return uc.process(ctx, kindEmail, scene, email, cfg, func(code string) error {
 		return uc.email.Send(ctx, email, cfg.TemplateName, map[string]string{"code": code})
@@ -127,6 +117,10 @@ func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string,
 		uc.log.Errorf("验证码已发送，但缓存验证码失败: %v", err)
 		return 0, ErrorOtpSendError
 	}
+
+	// 发新验证码前清理上一轮的失败计数
+	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, receiver)
+	_ = uc.cache.Del(ctx, failKey)
 
 	if debug.IsDebug() {
 		if info, ok := debug.FromContext(ctx); ok {
