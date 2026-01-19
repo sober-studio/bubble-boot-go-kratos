@@ -9,9 +9,12 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/biz"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/email"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/sms"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/server"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
 )
@@ -25,13 +28,25 @@ import (
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger log.Logger) (*kratos.App, func(), error) {
 	grpcServer := server.NewGRPCServer(confServer, logger)
-	publicService := service.NewPublicService()
-	passportService := service.NewPassportService()
+	db := data.NewDB(confData, logger)
 	client := data.NewRedis(confData, logger)
+	dataData, cleanup, err := data.NewData(confData, logger, db, client)
+	if err != nil {
+		return nil, nil, err
+	}
+	store := data.NewRedisCaptchaStore(dataData)
+	captchaUseCase := biz.NewCaptchaUseCase(store, logger)
+	sender := sms.NewSmsSender(confData, logger)
+	emailSender := email.NewEmailSender(confData, logger)
+	otpCache := data.NewRedisOtpCache(dataData)
+	otpUseCase := biz.NewOtpUseCase(sender, emailSender, otpCache, app, logger)
+	publicService := service.NewPublicService(captchaUseCase, otpUseCase, logger)
+	passportService := service.NewPassportService()
 	tokenStore := auth.NewTokenStore(app, client)
 	tokenService := auth.NewTokenService(app, tokenStore)
 	httpServer := server.NewHTTPServer(confServer, app, publicService, passportService, tokenService, logger)
 	kratosApp := newApp(logger, grpcServer, httpServer)
 	return kratosApp, func() {
+		cleanup()
 	}, nil
 }

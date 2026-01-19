@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Public_GetCaptcha_FullMethodName  = "/api.public.v1.Public/GetCaptcha"
-	Public_SendSmsCode_FullMethodName = "/api.public.v1.Public/SendSmsCode"
+	Public_GetCaptcha_FullMethodName = "/api.public.v1.Public/GetCaptcha"
+	Public_SendSmsOtp_FullMethodName = "/api.public.v1.Public/SendSmsOtp"
 )
 
 // PublicClient is the client API for Public service.
@@ -30,7 +30,7 @@ type PublicClient interface {
 	// 获取图形验证码
 	GetCaptcha(ctx context.Context, in *GetCaptchaRequest, opts ...grpc.CallOption) (*GetCaptchaReply, error)
 	// 获取短信验证码
-	SendSmsCode(ctx context.Context, in *SendSmsCodeRequest, opts ...grpc.CallOption) (*SendSmsCodeReply, error)
+	SendSmsOtp(ctx context.Context, in *SendSmsOtpRequest, opts ...grpc.CallOption) (*SendSmsOtpReply, error)
 }
 
 type publicClient struct {
@@ -51,10 +51,10 @@ func (c *publicClient) GetCaptcha(ctx context.Context, in *GetCaptchaRequest, op
 	return out, nil
 }
 
-func (c *publicClient) SendSmsCode(ctx context.Context, in *SendSmsCodeRequest, opts ...grpc.CallOption) (*SendSmsCodeReply, error) {
+func (c *publicClient) SendSmsOtp(ctx context.Context, in *SendSmsOtpRequest, opts ...grpc.CallOption) (*SendSmsOtpReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SendSmsCodeReply)
-	err := c.cc.Invoke(ctx, Public_SendSmsCode_FullMethodName, in, out, cOpts...)
+	out := new(SendSmsOtpReply)
+	err := c.cc.Invoke(ctx, Public_SendSmsOtp_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ type PublicServer interface {
 	// 获取图形验证码
 	GetCaptcha(context.Context, *GetCaptchaRequest) (*GetCaptchaReply, error)
 	// 获取短信验证码
-	SendSmsCode(context.Context, *SendSmsCodeRequest) (*SendSmsCodeReply, error)
+	SendSmsOtp(context.Context, *SendSmsOtpRequest) (*SendSmsOtpReply, error)
 	mustEmbedUnimplementedPublicServer()
 }
 
@@ -82,8 +82,8 @@ type UnimplementedPublicServer struct{}
 func (UnimplementedPublicServer) GetCaptcha(context.Context, *GetCaptchaRequest) (*GetCaptchaReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetCaptcha not implemented")
 }
-func (UnimplementedPublicServer) SendSmsCode(context.Context, *SendSmsCodeRequest) (*SendSmsCodeReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method SendSmsCode not implemented")
+func (UnimplementedPublicServer) SendSmsOtp(context.Context, *SendSmsOtpRequest) (*SendSmsOtpReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendSmsOtp not implemented")
 }
 func (UnimplementedPublicServer) mustEmbedUnimplementedPublicServer() {}
 func (UnimplementedPublicServer) testEmbeddedByValue()                {}
@@ -124,20 +124,20 @@ func _Public_GetCaptcha_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Public_SendSmsCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendSmsCodeRequest)
+func _Public_SendSmsOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendSmsOtpRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PublicServer).SendSmsCode(ctx, in)
+		return srv.(PublicServer).SendSmsOtp(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Public_SendSmsCode_FullMethodName,
+		FullMethod: Public_SendSmsOtp_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PublicServer).SendSmsCode(ctx, req.(*SendSmsCodeRequest))
+		return srv.(PublicServer).SendSmsOtp(ctx, req.(*SendSmsOtpRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -154,8 +154,8 @@ var Public_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Public_GetCaptcha_Handler,
 		},
 		{
-			MethodName: "SendSmsCode",
-			Handler:    _Public_SendSmsCode_Handler,
+			MethodName: "SendSmsOtp",
+			Handler:    _Public_SendSmsOtp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

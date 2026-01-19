@@ -194,18 +194,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.public.v1.GetCaptchaReply'
-    /public/sms-code:
+    /public/otp/sms:
         post:
             tags:
                 - Public
             summary: 获取短信验证码
             description: 获取短信验证码
-            operationId: Public_SendSmsCode
+            operationId: Public_SendSmsOtp
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.public.v1.SendSmsCodeRequest'
+                            $ref: '#/components/schemas/api.public.v1.SendSmsOtpRequest'
                 required: true
             responses:
                 "200":
@@ -213,7 +213,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.public.v1.SendSmsCodeReply'
+                                $ref: '#/components/schemas/api.public.v1.SendSmsOtpReply'
 components:
     schemas:
         api.passport.v1.BindMobileReply:
@@ -392,13 +392,13 @@ components:
                 image_b64:
                     type: string
                     description: 验证码内容
-        api.public.v1.SendSmsCodeReply:
+        api.public.v1.SendSmsOtpReply:
             type: object
             properties:
                 expire_at:
                     type: string
                     description: 验证码过期时间戳，单位秒
-        api.public.v1.SendSmsCodeRequest:
+        api.public.v1.SendSmsOtpRequest:
             required:
                 - mobile
                 - captcha_id

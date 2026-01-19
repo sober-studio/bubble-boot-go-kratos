@@ -26,31 +26,31 @@ const (
 
 // ========== 发送短信验证码 ==========
 // 短信验证码场景
-type SmsCodeScene int32
+type SmsOtpScene int32
 
 const (
 	// 未指定（默认值，不应使用）
-	SmsCodeScene_UNSPECIFIED SmsCodeScene = 0
+	SmsOtpScene_UNSPECIFIED SmsOtpScene = 0
 	// 登录
-	SmsCodeScene_LOGIN SmsCodeScene = 1
+	SmsOtpScene_LOGIN SmsOtpScene = 1
 	// 注册
-	SmsCodeScene_REGISTER SmsCodeScene = 2
+	SmsOtpScene_REGISTER SmsOtpScene = 2
 	// 忘记密码
-	SmsCodeScene_FORGET SmsCodeScene = 3
+	SmsOtpScene_FORGET SmsOtpScene = 3
 	// 绑定
-	SmsCodeScene_BIND SmsCodeScene = 4
+	SmsOtpScene_BIND SmsOtpScene = 4
 )
 
-// Enum value maps for SmsCodeScene.
+// Enum value maps for SmsOtpScene.
 var (
-	SmsCodeScene_name = map[int32]string{
+	SmsOtpScene_name = map[int32]string{
 		0: "UNSPECIFIED",
 		1: "LOGIN",
 		2: "REGISTER",
 		3: "FORGET",
 		4: "BIND",
 	}
-	SmsCodeScene_value = map[string]int32{
+	SmsOtpScene_value = map[string]int32{
 		"UNSPECIFIED": 0,
 		"LOGIN":       1,
 		"REGISTER":    2,
@@ -59,30 +59,30 @@ var (
 	}
 )
 
-func (x SmsCodeScene) Enum() *SmsCodeScene {
-	p := new(SmsCodeScene)
+func (x SmsOtpScene) Enum() *SmsOtpScene {
+	p := new(SmsOtpScene)
 	*p = x
 	return p
 }
 
-func (x SmsCodeScene) String() string {
+func (x SmsOtpScene) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (SmsCodeScene) Descriptor() protoreflect.EnumDescriptor {
+func (SmsOtpScene) Descriptor() protoreflect.EnumDescriptor {
 	return file_public_v1_public_proto_enumTypes[0].Descriptor()
 }
 
-func (SmsCodeScene) Type() protoreflect.EnumType {
+func (SmsOtpScene) Type() protoreflect.EnumType {
 	return &file_public_v1_public_proto_enumTypes[0]
 }
 
-func (x SmsCodeScene) Number() protoreflect.EnumNumber {
+func (x SmsOtpScene) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use SmsCodeScene.Descriptor instead.
-func (SmsCodeScene) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use SmsOtpScene.Descriptor instead.
+func (SmsOtpScene) EnumDescriptor() ([]byte, []int) {
 	return file_public_v1_public_proto_rawDescGZIP(), []int{0}
 }
 
@@ -177,7 +177,7 @@ func (x *GetCaptchaReply) GetImageB64() string {
 	return ""
 }
 
-type SendSmsCodeRequest struct {
+type SendSmsOtpRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 手机号，规则：11位数字
 	Mobile string `protobuf:"bytes,1,opt,name=mobile,proto3" json:"mobile,omitempty"`
@@ -186,25 +186,25 @@ type SendSmsCodeRequest struct {
 	// 图形验证码
 	Captcha string `protobuf:"bytes,3,opt,name=captcha,proto3" json:"captcha,omitempty"`
 	// 验证码场景
-	Scene         SmsCodeScene `protobuf:"varint,4,opt,name=scene,proto3,enum=api.public.v1.SmsCodeScene" json:"scene,omitempty"`
+	Scene         SmsOtpScene `protobuf:"varint,4,opt,name=scene,proto3,enum=api.public.v1.SmsOtpScene" json:"scene,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SendSmsCodeRequest) Reset() {
-	*x = SendSmsCodeRequest{}
+func (x *SendSmsOtpRequest) Reset() {
+	*x = SendSmsOtpRequest{}
 	mi := &file_public_v1_public_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SendSmsCodeRequest) String() string {
+func (x *SendSmsOtpRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SendSmsCodeRequest) ProtoMessage() {}
+func (*SendSmsOtpRequest) ProtoMessage() {}
 
-func (x *SendSmsCodeRequest) ProtoReflect() protoreflect.Message {
+func (x *SendSmsOtpRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_public_v1_public_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -216,40 +216,40 @@ func (x *SendSmsCodeRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SendSmsCodeRequest.ProtoReflect.Descriptor instead.
-func (*SendSmsCodeRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SendSmsOtpRequest.ProtoReflect.Descriptor instead.
+func (*SendSmsOtpRequest) Descriptor() ([]byte, []int) {
 	return file_public_v1_public_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *SendSmsCodeRequest) GetMobile() string {
+func (x *SendSmsOtpRequest) GetMobile() string {
 	if x != nil {
 		return x.Mobile
 	}
 	return ""
 }
 
-func (x *SendSmsCodeRequest) GetCaptchaId() string {
+func (x *SendSmsOtpRequest) GetCaptchaId() string {
 	if x != nil {
 		return x.CaptchaId
 	}
 	return ""
 }
 
-func (x *SendSmsCodeRequest) GetCaptcha() string {
+func (x *SendSmsOtpRequest) GetCaptcha() string {
 	if x != nil {
 		return x.Captcha
 	}
 	return ""
 }
 
-func (x *SendSmsCodeRequest) GetScene() SmsCodeScene {
+func (x *SendSmsOtpRequest) GetScene() SmsOtpScene {
 	if x != nil {
 		return x.Scene
 	}
-	return SmsCodeScene_UNSPECIFIED
+	return SmsOtpScene_UNSPECIFIED
 }
 
-type SendSmsCodeReply struct {
+type SendSmsOtpReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 验证码过期时间戳（秒）
 	ExpireAt      int64 `protobuf:"varint,1,opt,name=expire_at,proto3" json:"expire_at,omitempty"`
@@ -257,20 +257,20 @@ type SendSmsCodeReply struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SendSmsCodeReply) Reset() {
-	*x = SendSmsCodeReply{}
+func (x *SendSmsOtpReply) Reset() {
+	*x = SendSmsOtpReply{}
 	mi := &file_public_v1_public_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SendSmsCodeReply) String() string {
+func (x *SendSmsOtpReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SendSmsCodeReply) ProtoMessage() {}
+func (*SendSmsOtpReply) ProtoMessage() {}
 
-func (x *SendSmsCodeReply) ProtoReflect() protoreflect.Message {
+func (x *SendSmsOtpReply) ProtoReflect() protoreflect.Message {
 	mi := &file_public_v1_public_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -282,12 +282,12 @@ func (x *SendSmsCodeReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SendSmsCodeReply.ProtoReflect.Descriptor instead.
-func (*SendSmsCodeReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use SendSmsOtpReply.ProtoReflect.Descriptor instead.
+func (*SendSmsOtpReply) Descriptor() ([]byte, []int) {
 	return file_public_v1_public_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *SendSmsCodeReply) GetExpireAt() int64 {
+func (x *SendSmsOtpReply) GetExpireAt() int64 {
 	if x != nil {
 		return x.ExpireAt
 	}
@@ -304,27 +304,28 @@ const file_public_v1_public_proto_rawDesc = "" +
 	"\n" +
 	"captcha_id\x18\x01 \x01(\tB\x11\xbaG\x0e\x92\x02\v验证码idR\n" +
 	"captcha_id\x123\n" +
-	"\timage_b64\x18\x02 \x01(\tB\x15\xbaG\x12\x92\x02\x0f验证码内容R\timage_b64\"\xbf\x02\n" +
-	"\x12SendSmsCodeRequest\x12M\n" +
+	"\timage_b64\x18\x02 \x01(\tB\x15\xbaG\x12\x92\x02\x0f验证码内容R\timage_b64\"\xbd\x02\n" +
+	"\x11SendSmsOtpRequest\x12M\n" +
 	"\x06mobile\x18\x01 \x01(\tB5\xe2A\x01\x02\xfaB\x11r\x0f2\r^1[3-9]\\d{9}$\xbaG\x1a\x92\x02\x17手机号，11位数字R\x06mobile\x12;\n" +
 	"\n" +
 	"captcha_id\x18\x02 \x01(\tB\x1b\xe2A\x01\x02\xbaG\x14\x92\x02\x11图形验证码IDR\n" +
 	"captcha_id\x129\n" +
-	"\acaptcha\x18\x03 \x01(\tB\x1f\xe2A\x01\x02\xbaG\x18\x92\x02\x15图形验证码内容R\acaptcha\x12b\n" +
-	"\x05scene\x18\x04 \x01(\x0e2\x1b.api.public.v1.SmsCodeSceneB/\xe2A\x01\x02\xfaB\a\x82\x01\x04\x10\x01 \x00\xbaG\x1e\x92\x02\x1b短信验证码业务场景R\x05scene\"\\\n" +
-	"\x10SendSmsCodeReply\x12H\n" +
-	"\texpire_at\x18\x01 \x01(\x03B*\xbaG'\x92\x02$验证码过期时间戳，单位秒R\texpire_at*N\n" +
-	"\fSmsCodeScene\x12\x0f\n" +
+	"\acaptcha\x18\x03 \x01(\tB\x1f\xe2A\x01\x02\xbaG\x18\x92\x02\x15图形验证码内容R\acaptcha\x12a\n" +
+	"\x05scene\x18\x04 \x01(\x0e2\x1a.api.public.v1.SmsOtpSceneB/\xe2A\x01\x02\xfaB\a\x82\x01\x04\x10\x01 \x00\xbaG\x1e\x92\x02\x1b短信验证码业务场景R\x05scene\"[\n" +
+	"\x0fSendSmsOtpReply\x12H\n" +
+	"\texpire_at\x18\x01 \x01(\x03B*\xbaG'\x92\x02$验证码过期时间戳，单位秒R\texpire_at*M\n" +
+	"\vSmsOtpScene\x12\x0f\n" +
 	"\vUNSPECIFIED\x10\x00\x12\t\n" +
 	"\x05LOGIN\x10\x01\x12\f\n" +
 	"\bREGISTER\x10\x02\x12\n" +
 	"\n" +
 	"\x06FORGET\x10\x03\x12\b\n" +
-	"\x04BIND\x10\x042\x97\x02\n" +
+	"\x04BIND\x10\x042\x93\x02\n" +
 	"\x06Public\x12\x81\x01\n" +
 	"\n" +
-	"GetCaptcha\x12 .api.public.v1.GetCaptchaRequest\x1a\x1e.api.public.v1.GetCaptchaReply\"1\xbaG\x17\x12\x15获取图形验证码\x82\xd3\xe4\x93\x02\x11\x12\x0f/public/captcha\x12\x88\x01\n" +
-	"\vSendSmsCode\x12!.api.public.v1.SendSmsCodeRequest\x1a\x1f.api.public.v1.SendSmsCodeReply\"5\xbaG\x17\x12\x15获取短信验证码\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/public/sms-codeBQ\n" +
+	"GetCaptcha\x12 .api.public.v1.GetCaptchaRequest\x1a\x1e.api.public.v1.GetCaptchaReply\"1\xbaG\x17\x12\x15获取图形验证码\x82\xd3\xe4\x93\x02\x11\x12\x0f/public/captcha\x12\x84\x01\n" +
+	"\n" +
+	"SendSmsOtp\x12 .api.public.v1.SendSmsOtpRequest\x1a\x1e.api.public.v1.SendSmsOtpReply\"4\xbaG\x17\x12\x15获取短信验证码\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/public/otp/smsBQ\n" +
 	"\rapi.public.v1P\x01Z>github.com/sober-studio/bubble-boot-go-kratos/api/public/v1;v1b\x06proto3"
 
 var (
@@ -342,18 +343,18 @@ func file_public_v1_public_proto_rawDescGZIP() []byte {
 var file_public_v1_public_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_public_v1_public_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_public_v1_public_proto_goTypes = []any{
-	(SmsCodeScene)(0),          // 0: api.public.v1.SmsCodeScene
-	(*GetCaptchaRequest)(nil),  // 1: api.public.v1.GetCaptchaRequest
-	(*GetCaptchaReply)(nil),    // 2: api.public.v1.GetCaptchaReply
-	(*SendSmsCodeRequest)(nil), // 3: api.public.v1.SendSmsCodeRequest
-	(*SendSmsCodeReply)(nil),   // 4: api.public.v1.SendSmsCodeReply
+	(SmsOtpScene)(0),          // 0: api.public.v1.SmsOtpScene
+	(*GetCaptchaRequest)(nil), // 1: api.public.v1.GetCaptchaRequest
+	(*GetCaptchaReply)(nil),   // 2: api.public.v1.GetCaptchaReply
+	(*SendSmsOtpRequest)(nil), // 3: api.public.v1.SendSmsOtpRequest
+	(*SendSmsOtpReply)(nil),   // 4: api.public.v1.SendSmsOtpReply
 }
 var file_public_v1_public_proto_depIdxs = []int32{
-	0, // 0: api.public.v1.SendSmsCodeRequest.scene:type_name -> api.public.v1.SmsCodeScene
+	0, // 0: api.public.v1.SendSmsOtpRequest.scene:type_name -> api.public.v1.SmsOtpScene
 	1, // 1: api.public.v1.Public.GetCaptcha:input_type -> api.public.v1.GetCaptchaRequest
-	3, // 2: api.public.v1.Public.SendSmsCode:input_type -> api.public.v1.SendSmsCodeRequest
+	3, // 2: api.public.v1.Public.SendSmsOtp:input_type -> api.public.v1.SendSmsOtpRequest
 	2, // 3: api.public.v1.Public.GetCaptcha:output_type -> api.public.v1.GetCaptchaReply
-	4, // 4: api.public.v1.Public.SendSmsCode:output_type -> api.public.v1.SendSmsCodeReply
+	4, // 4: api.public.v1.Public.SendSmsOtp:output_type -> api.public.v1.SendSmsOtpReply
 	3, // [3:5] is the sub-list for method output_type
 	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

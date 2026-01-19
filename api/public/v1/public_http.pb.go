@@ -20,19 +20,19 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationPublicGetCaptcha = "/api.public.v1.Public/GetCaptcha"
-const OperationPublicSendSmsCode = "/api.public.v1.Public/SendSmsCode"
+const OperationPublicSendSmsOtp = "/api.public.v1.Public/SendSmsOtp"
 
 type PublicHTTPServer interface {
 	// GetCaptcha 获取图形验证码
 	GetCaptcha(context.Context, *GetCaptchaRequest) (*GetCaptchaReply, error)
-	// SendSmsCode 获取短信验证码
-	SendSmsCode(context.Context, *SendSmsCodeRequest) (*SendSmsCodeReply, error)
+	// SendSmsOtp 获取短信验证码
+	SendSmsOtp(context.Context, *SendSmsOtpRequest) (*SendSmsOtpReply, error)
 }
 
 func RegisterPublicHTTPServer(s *http.Server, srv PublicHTTPServer) {
 	r := s.Route("/")
 	r.GET("/public/captcha", _Public_GetCaptcha0_HTTP_Handler(srv))
-	r.POST("/public/sms-code", _Public_SendSmsCode0_HTTP_Handler(srv))
+	r.POST("/public/otp/sms", _Public_SendSmsOtp0_HTTP_Handler(srv))
 }
 
 func _Public_GetCaptcha0_HTTP_Handler(srv PublicHTTPServer) func(ctx http.Context) error {
@@ -54,24 +54,24 @@ func _Public_GetCaptcha0_HTTP_Handler(srv PublicHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Public_SendSmsCode0_HTTP_Handler(srv PublicHTTPServer) func(ctx http.Context) error {
+func _Public_SendSmsOtp0_HTTP_Handler(srv PublicHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in SendSmsCodeRequest
+		var in SendSmsOtpRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationPublicSendSmsCode)
+		http.SetOperation(ctx, OperationPublicSendSmsOtp)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SendSmsCode(ctx, req.(*SendSmsCodeRequest))
+			return srv.SendSmsOtp(ctx, req.(*SendSmsOtpRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*SendSmsCodeReply)
+		reply := out.(*SendSmsOtpReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -79,8 +79,8 @@ func _Public_SendSmsCode0_HTTP_Handler(srv PublicHTTPServer) func(ctx http.Conte
 type PublicHTTPClient interface {
 	// GetCaptcha 获取图形验证码
 	GetCaptcha(ctx context.Context, req *GetCaptchaRequest, opts ...http.CallOption) (rsp *GetCaptchaReply, err error)
-	// SendSmsCode 获取短信验证码
-	SendSmsCode(ctx context.Context, req *SendSmsCodeRequest, opts ...http.CallOption) (rsp *SendSmsCodeReply, err error)
+	// SendSmsOtp 获取短信验证码
+	SendSmsOtp(ctx context.Context, req *SendSmsOtpRequest, opts ...http.CallOption) (rsp *SendSmsOtpReply, err error)
 }
 
 type PublicHTTPClientImpl struct {
@@ -105,12 +105,12 @@ func (c *PublicHTTPClientImpl) GetCaptcha(ctx context.Context, in *GetCaptchaReq
 	return &out, nil
 }
 
-// SendSmsCode 获取短信验证码
-func (c *PublicHTTPClientImpl) SendSmsCode(ctx context.Context, in *SendSmsCodeRequest, opts ...http.CallOption) (*SendSmsCodeReply, error) {
-	var out SendSmsCodeReply
-	pattern := "/public/sms-code"
+// SendSmsOtp 获取短信验证码
+func (c *PublicHTTPClientImpl) SendSmsOtp(ctx context.Context, in *SendSmsOtpRequest, opts ...http.CallOption) (*SendSmsOtpReply, error) {
+	var out SendSmsOtpReply
+	pattern := "/public/otp/sms"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationPublicSendSmsCode))
+	opts = append(opts, http.Operation(OperationPublicSendSmsOtp))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

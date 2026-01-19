@@ -23,9 +23,9 @@ service Public {
 	}
 
 	// 获取短信验证码
-	rpc SendSmsCode (SendSmsCodeRequest) returns (SendSmsCodeReply) {
+	rpc SendSmsOtp (SendSmsOtpRequest) returns (SendSmsOtpReply) {
 		option (google.api.http) = {
-			post: "/public/sms-code"
+			post: "/public/otp/sms"
 			body: "*"
 		};
 		option(openapi.v3.operation) = {
@@ -47,7 +47,7 @@ message GetCaptchaReply {
 
 // ========== 发送短信验证码 ==========
 // 短信验证码场景
-enum SmsCodeScene {
+enum SmsOtpScene {
 	// 未指定（默认值，不应使用）
 	UNSPECIFIED = 0;
 	// 登录
@@ -60,7 +60,7 @@ enum SmsCodeScene {
 	BIND = 4;
 }
 
-message SendSmsCodeRequest {
+message SendSmsOtpRequest {
 	// 手机号，规则：11位数字
 	string mobile = 1 [
 		json_name = "mobile",
@@ -81,7 +81,7 @@ message SendSmsCodeRequest {
 		(google.api.field_behavior) = REQUIRED
 	];
 	// 验证码场景
-	SmsCodeScene scene = 4 [
+	SmsOtpScene scene = 4 [
 		json_name = "scene",
 		(openapi.v3.property) = { description: "短信验证码业务场景" },
 		(validate.rules).enum = {defined_only: true, not_in: [0]},
@@ -89,7 +89,7 @@ message SendSmsCodeRequest {
 	];
 }
 
-message SendSmsCodeReply {
+message SendSmsOtpReply {
 	// 验证码过期时间戳（秒）
 	int64 expire_at = 1 [
 		json_name = "expire_at",

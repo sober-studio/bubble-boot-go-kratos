@@ -41,7 +41,7 @@ type SmsSender interface {
 }
 
 type EmailSender interface {
-	Send(ctx context.Context, email, subjectName string, params map[string]string) error
+	Send(ctx context.Context, email, templateName string, params map[string]string) error
 }
 
 type OtpCache interface {
@@ -66,10 +66,10 @@ func NewOtpUseCase(s SmsSender, e EmailSender, c OtpCache, conf *conf.App, logge
 }
 
 // SendPhoneOtp 发送手机验证码
-func (uc *OtpUseCase) SendPhoneOtp(ctx context.Context, phone, scene string) error {
+func (uc *OtpUseCase) SendPhoneOtp(ctx context.Context, phone, scene string) (int64, error) {
 	cfg, ok := uc.conf.PhoneScenes[scene]
 	if !ok {
-		return ErrorSceneNotFound
+		return 0, ErrorSceneNotFound
 	}
 
 	kind := kindPhone
@@ -83,10 +83,10 @@ func (uc *OtpUseCase) SendPhoneOtp(ctx context.Context, phone, scene string) err
 }
 
 // SendEmailOtp 发送邮箱验证码
-func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) error {
+func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) (int64, error) {
 	cfg, ok := uc.conf.EmailScenes[scene]
 	if !ok {
-		return ErrorSceneNotFound
+		return 0, ErrorSceneNotFound
 	}
 
 	kind := kindEmail
@@ -100,7 +100,7 @@ func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) err
 }
 
 // 内部抽象流程
-func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string, cfg *conf.App_Otp_Scene, sendFn func(code string) error) error {
+func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string, cfg *conf.App_Otp_Scene, sendFn func(code string) error) (int64, error) {
 	intervalKey := fmt.Sprintf(otpIntervalKeyPattern, kind, scene, receiver)
 	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
 
@@ -109,23 +109,23 @@ func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string,
 	acquired, err := uc.cache.SetNX(ctx, intervalKey, "1", resendInterval)
 	if err != nil {
 		uc.log.Errorf("设置发送频率标记失败: %v", err)
-		return ErrorOtpSendError
+		return 0, ErrorOtpSendError
 	}
 	if !acquired {
-		return ErrorOtpSendTooFrequent
+		return 0, ErrorOtpSendTooFrequent
 	}
 
 	code := uc.generateCode(cfg.CodeLength)
 
 	if err := sendFn(code); err != nil {
 		uc.log.Errorf("发送%s验证码失败: %v", kind, err)
-		return ErrorOtpSendError
+		return 0, ErrorOtpSendError
 	}
 
 	expiration := cfg.ExpiresIn.AsDuration()
 	if err := uc.cache.Set(ctx, codeKey, code, expiration); err != nil {
 		uc.log.Errorf("验证码已发送，但缓存验证码失败: %v", err)
-		return ErrorOtpSendError
+		return 0, ErrorOtpSendError
 	}
 
 	if debug.IsDebug() {
@@ -134,7 +134,7 @@ func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string,
 		}
 	}
 
-	return nil
+	return time.Now().Add(expiration).Unix(), nil
 }
 
 // VerifyPhoneOtp 校验手机验证码
