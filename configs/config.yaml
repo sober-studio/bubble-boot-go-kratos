@@ -23,9 +23,10 @@ data:
     sign_name: "SOME_SIGN_NAME"
     # 逻辑模板名 -> 供应商真实的模板 ID 映射
     template_mapping:
-      "otp_reg": "SMS_10000001"
+      "otp_register": "SMS_10000001"
       "otp_login": "SMS_10000002"
-      "otp_common": "SMS_10000003"
+      "otp_bind": "SMS_10000003"
+      "otp_reset": "SMS_10000003"
 
   # 邮件供应商细节
   email:
@@ -61,17 +62,22 @@ app:
       register:
         expires_in: 300s       # 5分钟有效
         resend_interval: 60s   # 1分钟后可重发
-        template_name: "otp_reg"
+        template_name: "otp_register"
         code_length: 6
       login:
         expires_in: 300s
         resend_interval: 60s
         template_name: "otp_login"
         code_length: 6
-      change_phone:
+      bind:
         expires_in: 300s
         resend_interval: 120s  # 敏感操作，重发间隔设长一点
-        template_name: "otp_common"
+        template_name: "otp_bind"
+        code_length: 6
+      reset:
+        expires_in: 300s
+        resend_interval: 120s  # 敏感操作，重发间隔设长一点
+        template_name: "otp_reset"
         code_length: 6
 
     # 邮箱场景：绑定邮箱、找回密码

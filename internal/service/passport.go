@@ -50,7 +50,7 @@ func (s *PassportService) LoginByPassword(ctx context.Context, req *pb.LoginByPa
 
 func (s *PassportService) LoginByOtp(ctx context.Context, req *pb.LoginByOtpRequest) (*pb.LoginReply, error) {
 	// 校验短信验证码
-	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, "login", req.Code); err != nil || !valid {
+	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, biz.Login, req.Code); err != nil || !valid {
 		return nil, biz.ErrorOtpInvalid
 	}
 
@@ -98,7 +98,7 @@ func (s *PassportService) UpdatePassword(ctx context.Context, req *pb.UpdatePass
 
 func (s *PassportService) BindMobile(ctx context.Context, req *pb.BindMobileRequest) (*pb.BindMobileReply, error) {
 	// 校验短信验证码
-	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, "bind_mobile", req.Code); err != nil || !valid {
+	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, biz.Bind, req.Code); err != nil || !valid {
 		return nil, biz.ErrorOtpInvalid
 	}
 
@@ -111,7 +111,7 @@ func (s *PassportService) BindMobile(ctx context.Context, req *pb.BindMobileRequ
 
 func (s *PassportService) UpdateMobile(ctx context.Context, req *pb.UpdateMobileRequest) (*pb.UpdateMobileReply, error) {
 	// 校验短信验证码
-	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, "update_mobile", req.Code); err != nil || !valid {
+	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, biz.Bind, req.Code); err != nil || !valid {
 		return nil, biz.ErrorOtpInvalid
 	}
 
@@ -128,7 +128,7 @@ func (s *PassportService) ResetPassword(ctx context.Context, req *pb.ResetPasswo
 	}
 
 	// 校验短信验证码
-	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, "reset_password", req.SmsCode); err != nil || !valid {
+	if valid, err := s.otp.VerifyPhoneOtp(ctx, req.Mobile, biz.Reset, req.SmsCode); err != nil || !valid {
 		return nil, biz.ErrorOtpInvalid
 	}
 

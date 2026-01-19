@@ -31,31 +31,31 @@ type SmsOtpScene int32
 const (
 	// 未指定（默认值，不应使用）
 	SmsOtpScene_UNSPECIFIED SmsOtpScene = 0
-	// 登录
-	SmsOtpScene_LOGIN SmsOtpScene = 1
 	// 注册
-	SmsOtpScene_REGISTER SmsOtpScene = 2
-	// 忘记密码
-	SmsOtpScene_FORGET SmsOtpScene = 3
+	SmsOtpScene_REGISTER SmsOtpScene = 1
+	// 登录
+	SmsOtpScene_LOGIN SmsOtpScene = 2
 	// 绑定
-	SmsOtpScene_BIND SmsOtpScene = 4
+	SmsOtpScene_BIND SmsOtpScene = 3
+	// 忘记密码
+	SmsOtpScene_FORGET SmsOtpScene = 4
 )
 
 // Enum value maps for SmsOtpScene.
 var (
 	SmsOtpScene_name = map[int32]string{
 		0: "UNSPECIFIED",
-		1: "LOGIN",
-		2: "REGISTER",
-		3: "FORGET",
-		4: "BIND",
+		1: "REGISTER",
+		2: "LOGIN",
+		3: "BIND",
+		4: "FORGET",
 	}
 	SmsOtpScene_value = map[string]int32{
 		"UNSPECIFIED": 0,
-		"LOGIN":       1,
-		"REGISTER":    2,
-		"FORGET":      3,
-		"BIND":        4,
+		"REGISTER":    1,
+		"LOGIN":       2,
+		"BIND":        3,
+		"FORGET":      4,
 	}
 )
 
@@ -315,12 +315,12 @@ const file_api_public_v1_public_proto_rawDesc = "" +
 	"\x0fSendSmsOtpReply\x12H\n" +
 	"\texpire_at\x18\x01 \x01(\x03B*\xbaG'\x92\x02$验证码过期时间戳，单位秒R\texpire_at*M\n" +
 	"\vSmsOtpScene\x12\x0f\n" +
-	"\vUNSPECIFIED\x10\x00\x12\t\n" +
-	"\x05LOGIN\x10\x01\x12\f\n" +
-	"\bREGISTER\x10\x02\x12\n" +
+	"\vUNSPECIFIED\x10\x00\x12\f\n" +
+	"\bREGISTER\x10\x01\x12\t\n" +
+	"\x05LOGIN\x10\x02\x12\b\n" +
+	"\x04BIND\x10\x03\x12\n" +
 	"\n" +
-	"\x06FORGET\x10\x03\x12\b\n" +
-	"\x04BIND\x10\x042\x93\x02\n" +
+	"\x06FORGET\x10\x042\x93\x02\n" +
 	"\x06Public\x12\x81\x01\n" +
 	"\n" +
 	"GetCaptcha\x12 .api.public.v1.GetCaptchaRequest\x1a\x1e.api.public.v1.GetCaptchaReply\"1\xbaG\x17\x12\x15获取图形验证码\x82\xd3\xe4\x93\x02\x11\x12\x0f/public/captcha\x12\x84\x01\n" +

@@ -27,6 +27,15 @@ const (
 	kindEmail = "email"
 )
 
+type Scene string
+
+const (
+	Register Scene = "register"
+	Login    Scene = "login"
+	Bind     Scene = "bind"
+	Reset    Scene = "reset"
+)
+
 var (
 	ErrorOtpSendError       = kerrors.InternalServer("OTP_SEND_ERROR", "发送验证码错误")
 	ErrorOtpSendTooFrequent = kerrors.BadRequest("OTP_SEND_TOO_FAST", "发送过于频繁，请稍后再试")
@@ -132,17 +141,17 @@ func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string,
 }
 
 // VerifyPhoneOtp 校验手机验证码
-func (uc *OtpUseCase) VerifyPhoneOtp(ctx context.Context, phone, scene, code string) (bool, error) {
+func (uc *OtpUseCase) VerifyPhoneOtp(ctx context.Context, phone string, scene Scene, code string) (bool, error) {
 	return uc.verify(ctx, kindPhone, scene, phone, code)
 }
 
 // VerifyEmailOtp 校验邮箱验证码
-func (uc *OtpUseCase) VerifyEmailOtp(ctx context.Context, email, scene, code string) (bool, error) {
+func (uc *OtpUseCase) VerifyEmailOtp(ctx context.Context, email string, scene Scene, code string) (bool, error) {
 	return uc.verify(ctx, kindEmail, scene, email, code)
 }
 
 // 内部通用校验逻辑
-func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCode string) (bool, error) {
+func (uc *OtpUseCase) verify(ctx context.Context, kind string, scene Scene, receiver, inputCode string) (bool, error) {
 	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
 	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, receiver)
 

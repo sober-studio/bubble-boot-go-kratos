@@ -50,14 +50,14 @@ message GetCaptchaReply {
 enum SmsOtpScene {
 	// 未指定（默认值，不应使用）
 	UNSPECIFIED = 0;
-	// 登录
-	LOGIN = 1;
 	// 注册
-	REGISTER = 2;
-	// 忘记密码
-	FORGET = 3;
+	REGISTER = 1;
+	// 登录
+	LOGIN = 2;
 	// 绑定
-	BIND = 4;
+	BIND = 3;
+	// 忘记密码
+	RESET = 4;
 }
 
 message SendSmsOtpRequest {
@@ -83,7 +83,7 @@ message SendSmsOtpRequest {
 	// 验证码场景
 	SmsOtpScene scene = 4 [
 		json_name = "scene",
-		(openapi.v3.property) = { description: "短信验证码业务场景" },
+		(openapi.v3.property) = { description: "短信验证码业务场景：REGISTER/LOGIN/BIND/RESET" },
 		(validate.rules).enum = {defined_only: true, not_in: [0]},
 		(google.api.field_behavior) = REQUIRED
 	];
