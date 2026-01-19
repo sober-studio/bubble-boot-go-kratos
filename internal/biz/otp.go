@@ -22,6 +22,11 @@ const (
 	otpFailExpiration     = time.Hour
 )
 
+const (
+	kindPhone = "phone"
+	kindEmail = "email"
+)
+
 var (
 	ErrorOtpSendError       = kerrors.InternalServer("OTP_SEND_ERROR", "发送验证码错误")
 	ErrorOtpSendTooFrequent = kerrors.BadRequest("OTP_SEND_TOO_FAST", "发送过于频繁，请稍后再试")
@@ -67,7 +72,12 @@ func (uc *OtpUseCase) SendPhoneOtp(ctx context.Context, phone, scene string) err
 		return ErrorSceneNotFound
 	}
 
-	return uc.process(ctx, "phone", scene, phone, cfg, func(code string) error {
+	kind := kindPhone
+	// 发新验证码前清理上一轮的失败计数
+	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, phone)
+	_ = uc.cache.Del(ctx, failKey)
+
+	return uc.process(ctx, kindPhone, scene, phone, cfg, func(code string) error {
 		return uc.sms.Send(ctx, phone, cfg.TemplateName, map[string]string{"code": code})
 	})
 }
@@ -79,7 +89,12 @@ func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) err
 		return ErrorSceneNotFound
 	}
 
-	return uc.process(ctx, "email", scene, email, cfg, func(code string) error {
+	kind := kindEmail
+	// 发新验证码前清理上一轮的失败计数
+	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, email)
+	_ = uc.cache.Del(ctx, failKey)
+
+	return uc.process(ctx, kindEmail, scene, email, cfg, func(code string) error {
 		return uc.email.Send(ctx, email, cfg.TemplateName, map[string]string{"code": code})
 	})
 }
@@ -124,12 +139,12 @@ func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string,
 
 // VerifyPhoneOtp 校验手机验证码
 func (uc *OtpUseCase) VerifyPhoneOtp(ctx context.Context, phone, scene, code string) (bool, error) {
-	return uc.verify(ctx, "phone", scene, phone, code)
+	return uc.verify(ctx, kindPhone, scene, phone, code)
 }
 
 // VerifyEmailOtp 校验邮箱验证码
 func (uc *OtpUseCase) VerifyEmailOtp(ctx context.Context, email, scene, code string) (bool, error) {
-	return uc.verify(ctx, "email", scene, email, code)
+	return uc.verify(ctx, kindEmail, scene, email, code)
 }
 
 // 内部通用校验逻辑
