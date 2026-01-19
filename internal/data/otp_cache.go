@@ -2,8 +2,10 @@ package data
 
 import (
 	"context"
+	"errors"
 	"time"
 
+	"github.com/redis/go-redis/v9"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/biz"
 )
 
@@ -20,7 +22,14 @@ func (r *redisOtpCache) Set(ctx context.Context, k, v string, exp time.Duration)
 }
 
 func (r *redisOtpCache) Get(ctx context.Context, k string) (string, error) {
-	return r.data.RDB().Get(ctx, k).Result()
+	res, err := r.data.RDB().Get(ctx, k).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", biz.ErrOtpCacheMiss
+	}
+	if err != nil {
+		return "", err
+	}
+	return res, nil
 }
 
 func (r *redisOtpCache) Del(ctx context.Context, k string) error {

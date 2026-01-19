@@ -3,11 +3,12 @@ package biz
 import (
 	"context"
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"math/big"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/errors"
+	kerrors "github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/debug"
@@ -19,11 +20,12 @@ const (
 )
 
 var (
-	ErrorOtpSendError       = errors.InternalServer("OTP_SEND_ERROR", "发送验证码错误")
-	ErrorOtpSendTooFrequent = errors.BadRequest("OTP_SEND_TOO_FAST", "发送过于频繁，请稍后再试")
-	ErrorSceneNotFound      = errors.BadRequest("SCENE_NOT_FOUND", "验证码场景错误")
-	ErrorOtpExpired         = errors.BadRequest("OTP_EXPIRED", "验证码已过期或未发送")
-	ErrorOtpInvalid         = errors.BadRequest("OTP_INVALID", "验证码错误")
+	ErrorOtpSendError       = kerrors.InternalServer("OTP_SEND_ERROR", "发送验证码错误")
+	ErrorOtpSendTooFrequent = kerrors.BadRequest("OTP_SEND_TOO_FAST", "发送过于频繁，请稍后再试")
+	ErrorSceneNotFound      = kerrors.BadRequest("SCENE_NOT_FOUND", "验证码场景错误")
+	ErrorOtpExpired         = kerrors.BadRequest("OTP_EXPIRED", "验证码已过期或未发送")
+	ErrorOtpInvalid         = kerrors.BadRequest("OTP_INVALID", "验证码错误")
+	ErrOtpCacheMiss         = kerrors.NotFound("OTP_CACHE_MISS", "验证码不存在或已过期")
 )
 
 type SmsSender interface {
@@ -129,11 +131,26 @@ func (uc *OtpUseCase) VerifyEmailOtp(ctx context.Context, email, scene, code str
 // 内部通用校验逻辑
 func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCode string) (bool, error) {
 	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
+
 	stored, err := uc.cache.Get(ctx, codeKey)
-	if err != nil || stored != inputCode {
+	if err != nil {
+		if errors.Is(err, ErrOtpCacheMiss) {
+			return false, ErrorOtpExpired
+		}
+		uc.log.Errorf("查询验证码失败: %v", err)
+		return false, ErrorOtpSendError
+	}
+
+	if stored != inputCode {
 		return false, ErrorOtpInvalid
 	}
-	return true, uc.cache.Del(ctx, codeKey)
+
+	if err := uc.cache.Del(ctx, codeKey); err != nil {
+		uc.log.Errorf("删除验证码失败: %v", err)
+		return true, ErrorOtpSendError
+	}
+
+	return true, nil
 }
 
 // 生成验证码
