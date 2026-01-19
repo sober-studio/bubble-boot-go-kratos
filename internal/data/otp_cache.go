@@ -40,3 +40,18 @@ func (r *redisOtpCache) Exists(ctx context.Context, k string) (bool, error) {
 	i, err := r.data.RDB().Exists(ctx, k).Result()
 	return i > 0, err
 }
+
+func (r *redisOtpCache) SetNX(ctx context.Context, k, v string, exp time.Duration) (bool, error) {
+	ok, err := r.data.RDB().SetNX(ctx, k, v, exp).Result()
+	return ok, err
+}
+
+func (r *redisOtpCache) Incr(ctx context.Context, k string, exp time.Duration) (int64, error) {
+	pipe := r.data.RDB().TxPipeline()
+	incr := pipe.Incr(ctx, k)
+	pipe.Expire(ctx, k, exp)
+	if _, err := pipe.Exec(ctx); err != nil {
+		return 0, err
+	}
+	return incr.Val(), nil
+}

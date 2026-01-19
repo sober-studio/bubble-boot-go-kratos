@@ -17,6 +17,9 @@ import (
 const (
 	otpIntervalKeyPattern = "otp:interval:%s:%s:%s"
 	otpCodeKeyPattern     = "otp:code:%s:%s:%s"
+	otpFailKeyPattern     = "otp:fail:%s:%s:%s"
+	otpMaxFailCount       = 5
+	otpFailExpiration     = time.Hour
 )
 
 var (
@@ -41,6 +44,8 @@ type OtpCache interface {
 	Get(ctx context.Context, key string) (string, error)
 	Del(ctx context.Context, key string) error
 	Exists(ctx context.Context, key string) (bool, error)
+	SetNX(ctx context.Context, key string, value string, expiration time.Duration) (bool, error)
+	Incr(ctx context.Context, key string, expiration time.Duration) (int64, error)
 }
 
 type OtpUseCase struct {
@@ -83,32 +88,31 @@ func (uc *OtpUseCase) SendEmailOtp(ctx context.Context, email, scene string) err
 func (uc *OtpUseCase) process(ctx context.Context, kind, scene, receiver string, cfg *conf.App_Otp_Scene, sendFn func(code string) error) error {
 	intervalKey := fmt.Sprintf(otpIntervalKeyPattern, kind, scene, receiver)
 	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
-	// 1. 限频校验
-	if exists, _ := uc.cache.Exists(ctx, intervalKey); exists {
+
+	resendInterval := cfg.ResendInterval.AsDuration()
+
+	acquired, err := uc.cache.SetNX(ctx, intervalKey, "1", resendInterval)
+	if err != nil {
+		uc.log.Errorf("设置发送频率标记失败: %v", err)
+		return ErrorOtpSendError
+	}
+	if !acquired {
 		return ErrorOtpSendTooFrequent
 	}
 
-	// 2. 生成
 	code := uc.generateCode(cfg.CodeLength)
 
-	// 3. 发送
 	if err := sendFn(code); err != nil {
 		uc.log.Errorf("发送%s验证码失败: %v", kind, err)
 		return ErrorOtpSendError
 	}
 
-	// 4. 存储
 	expiration := cfg.ExpiresIn.AsDuration()
 	if err := uc.cache.Set(ctx, codeKey, code, expiration); err != nil {
-		uc.log.Errorf("缓存短信验证码失败: %v", err)
-		return ErrorOtpSendError
-	}
-	if err := uc.cache.Set(ctx, intervalKey, "1", cfg.ResendInterval.AsDuration()); err != nil {
-		uc.log.Errorf("缓存短信发送频率失败: %v", err)
+		uc.log.Errorf("验证码已发送，但缓存验证码失败: %v", err)
 		return ErrorOtpSendError
 	}
 
-	// 5. DEBUG
 	if debug.IsDebug() {
 		if info, ok := debug.FromContext(ctx); ok {
 			info["otp"] = code
@@ -131,6 +135,7 @@ func (uc *OtpUseCase) VerifyEmailOtp(ctx context.Context, email, scene, code str
 // 内部通用校验逻辑
 func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCode string) (bool, error) {
 	codeKey := fmt.Sprintf(otpCodeKeyPattern, kind, scene, receiver)
+	failKey := fmt.Sprintf(otpFailKeyPattern, kind, scene, receiver)
 
 	stored, err := uc.cache.Get(ctx, codeKey)
 	if err != nil {
@@ -142,6 +147,13 @@ func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCo
 	}
 
 	if stored != inputCode {
+		failCount, incrErr := uc.cache.Incr(ctx, failKey, otpFailExpiration)
+		if incrErr != nil {
+			uc.log.Errorf("增加验证码失败计数失败: %v", incrErr)
+		}
+		if failCount >= otpMaxFailCount {
+			return false, ErrorOtpExpired
+		}
 		return false, ErrorOtpInvalid
 	}
 
@@ -149,6 +161,7 @@ func (uc *OtpUseCase) verify(ctx context.Context, kind, scene, receiver, inputCo
 		uc.log.Errorf("删除验证码失败: %v", err)
 		return true, ErrorOtpSendError
 	}
+	_ = uc.cache.Del(ctx, failKey)
 
 	return true, nil
 }
