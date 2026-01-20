@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package api.upload.v1;
+
+option go_package = "github.com/sober-studio/bubble-boot-go-kratos/api/upload/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.upload.v1";
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/api/httpbody.proto";
+import "openapi/v3/annotations.proto";
+
+service Upload {
+	// 上传文件
+	rpc UploadFile (UploadFileRequest) returns (UploadFileReply) {
+		option (google.api.http) = {
+			post: "/upload"
+			body: "*"
+		};
+		option(openapi.v3.operation) = {
+			summary: "上传文件"
+			description: "支持多种场景的文件上传，根据场景类型自动配置存储路径和访问权限"
+		};
+	}
+}
+
+// ========== 文件上传 ==========
+// 上传场景枚举
+enum UploadScene {
+	// 通用场景
+	UPLOAD_COMMON = 0;
+	// 用户头像
+	UPLOAD_AVATAR = 1;
+}
+
+message UploadFileRequest {
+	// 上传场景类型，用于区分不同的文件使用场景
+	UploadScene scene = 1 [
+		json_name = "scene",
+		(openapi.v3.property) = {
+			description: "上传场景类型，必须为已定义的枚举值：UPLOAD_COMMON/UPLOAD_AVATAR"
+		},
+		(validate.rules).enum = {defined_only: true},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 文件数据（二进制格式），通过 multipart/form-data 上传
+	bytes file = 2 [
+		json_name = "file",
+		(openapi.v3.property) = {
+			description: "文件二进制数据，使用 multipart/form-data 格式上传",
+			format: "binary"
+		},
+		(google.api.field_behavior) = REQUIRED
+	];
+	// 原始文件名（可选，用于保留文件扩展名）
+	string filename = 3 [
+		json_name = "filename",
+		(openapi.v3.property) = { description: "原始文件名，用于获取文件扩展名，如：document.pdf" }
+	];
+}
+
+message UploadFileReply {
+	// 文件存储路径（对象存储的key）
+	string file_key = 1 [
+		json_name = "file_key",
+		(openapi.v3.property) = { description: "文件在对象存储中的唯一标识路径" }
+	];
+	// 文件访问URL（公开文件直接返回URL，私有文件返回临时签名URL）
+	string file_url = 2 [
+		json_name = "file_url",
+		(openapi.v3.property) = { description: "文件访问地址，私有文件为临时签名URL（默认1小时有效期）" }
+	];
+	// 文件大小（字节）
+	int64 file_size = 3 [
+		json_name = "file_size",
+		(openapi.v3.property) = { description: "上传文件的大小，单位字节" }
+	];
+	// 是否为私有文件
+	bool is_private = 4 [
+		json_name = "is_private",
+		(openapi.v3.property) = { description: "文件是否为私有访问，true表示需要签名URL访问" }
+	];
+	// 上传时间戳（秒）
+	int64 uploaded_at = 5 [
+		json_name = "uploaded_at",
+		(openapi.v3.property) = { description: "文件上传完成的时间戳，单位秒" }
+	];
+}

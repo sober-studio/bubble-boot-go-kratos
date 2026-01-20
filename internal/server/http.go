@@ -1,6 +1,10 @@
 package server
 
 import (
+	"fmt"
+	"strings"
+
+	"github.com/go-kratos/kratos/v2/transport/http/binding"
 	passportV1 "github.com/sober-studio/bubble-boot-go-kratos/api/passport/v1"
 	publicV1 "github.com/sober-studio/bubble-boot-go-kratos/api/public/v1"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
@@ -30,6 +34,7 @@ func NewHTTPServer(
 			auth.Middleware(tokenService, auth.PathAccessConfigWithPublicList(app.Auth.PublicPaths)),
 		),
 		http.Filter(debug.Filter),
+		http.RequestDecoder(MultipartRequestDecoder),
 		http.ResponseEncoder(render.ResponseEncoder),
 		http.ErrorEncoder(render.ErrorEncoder),
 	}
@@ -49,4 +54,31 @@ func NewHTTPServer(
 	publicV1.RegisterPublicHTTPServer(srv, public)
 
 	return srv
+}
+
+// MultipartRequestDecoder 识别 multipart/form-data 并解析非文件字段
+func MultipartRequestDecoder(r *http.Request, v interface{}) error {
+	contentType := r.Header.Get("Content-Type")
+
+	// 如果是文件上传
+	if strings.HasPrefix(contentType, "multipart/form-data") {
+		// 1. 解析 multipart 表单
+		// 这一步执行后，非文件字段会被自动填充到 r.Form 中
+		if err := r.ParseMultipartForm(32 << 20); err != nil {
+			return err
+		}
+
+		// debug
+		fmt.Printf("Form Values: %+v\n", r.Form)
+
+		// 2. 直接传入 r
+		// Kratos 会自动从 r.Form 中提取数据并匹配到结构体 v
+		if err := binding.BindForm(r, v); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	// 如果是普通的 JSON 请求，走默认的解码逻辑
+	return http.DefaultRequestDecoder(r, v)
 }

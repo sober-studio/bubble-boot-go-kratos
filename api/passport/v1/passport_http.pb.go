@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.9.2
 // - protoc             v6.33.2
-// source: api/passport/v1/passport.proto
+// source: passport/v1/passport.proto
 
 package v1
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/wire"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/email"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/oss"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/sms"
 )
 
@@ -16,8 +17,10 @@ var ProviderSet = wire.NewSet(
 	email.NewEmailSender,
 	wire.Bind(new(SmsSender), new(sms.Sender)),
 	wire.Bind(new(EmailSender), new(email.Sender)),
+	oss.NewOSS,
 	// domains
 	NewPassportUseCase,
+	NewUploadUseCase,
 )
 
 // Transaction 事务接口
