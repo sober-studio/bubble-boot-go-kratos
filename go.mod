@@ -30,6 +30,7 @@ require (
 	github.com/aliyun/credentials-go v1.4.10
 	github.com/minio/minio-go/v7 v7.0.98
 	github.com/qiniu/go-sdk/v7 v7.25.6
+	github.com/robfig/cron/v3 v3.0.1
 	golang.org/x/crypto v0.46.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/plugin/dbresolver v1.6.2

@@ -12,6 +12,7 @@ import (
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/biz"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/job"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/email"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/sms"
@@ -48,7 +49,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger
 	publicService := service.NewPublicService(captchaUseCase, otpUseCase, passportUseCase, logger)
 	passportService := service.NewPassportService(passportUseCase, otpUseCase, captchaUseCase)
 	httpServer := server.NewHTTPServer(confServer, app, publicService, passportService, tokenService, logger)
-	kratosApp := newApp(logger, grpcServer, httpServer)
+	helloJob := job.NewHelloJob(logger)
+	cronServer := server.NewCronServer(confServer, logger, helloJob)
+	kratosApp := newApp(logger, grpcServer, httpServer, cronServer)
 	return kratosApp, func() {
 		cleanup()
 	}, nil

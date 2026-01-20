@@ -4,9 +4,6 @@ import (
 	"flag"
 	"os"
 
-	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
-	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/env"
-
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
@@ -14,6 +11,9 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/cron"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/env"
 
 	_ "go.uber.org/automaxprocs"
 )
@@ -34,7 +34,7 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, cron *cron.Server) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -44,6 +44,7 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 		kratos.Server(
 			gs,
 			hs,
+			cron,
 		),
 	)
 }

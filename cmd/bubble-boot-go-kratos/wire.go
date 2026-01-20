@@ -12,6 +12,7 @@ import (
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/biz"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/job"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/server"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
@@ -22,6 +23,7 @@ func wireApp(*conf.Server, *conf.Data, *conf.App, log.Logger) (*kratos.App, func
 	panic(wire.Build(
 		server.ProviderSet,
 		service.ProviderSet,
+		job.ProviderSet,
 		biz.ProviderSet,
 		data.ProviderSet,
 		auth.ProviderSet,
