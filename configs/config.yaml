@@ -15,6 +15,14 @@ data:
     database: 0
     read_timeout: 0.2s
     write_timeout: 0.2s
+  oss:
+    endpoint: "oss-cn-beijing.aliyuncs.com"
+    access_key_id: "LTAI5tXXXXXX"
+    access_key_secret: "XXXXXXXXXXXX"
+    bucket: "bubble-boot"
+    region: "cn-beijing"
+    domain: "https://bubble-boot.oss-cn-beijing.aliyuncs.com"
+    use_https: true
   # 短信供应商细节
   sms:
     provider: "aliyun" # 仅在 app.env 为 prod 时生效
@@ -79,7 +87,6 @@ app:
         resend_interval: 120s  # 敏感操作，重发间隔设长一点
         template_name: "otp_reset"
         code_length: 6
-
     # 邮箱场景：绑定邮箱、找回密码
     email_scenes:
       bind_email:
@@ -92,3 +99,25 @@ app:
         resend_interval: 60s
         template_name: "email_reset"
         code_length: 6
+  upload:
+    # 私有文件URL默认过期时间
+    private_url_expires: 3600s
+    # 上传场景配置
+    scenes:
+      # 通用
+      common_image:
+        path_prefix: "common/image"
+        is_private: false
+        max_size: 10485760  # 10MB
+        allowed_types:
+          - "image/jpeg"
+          - "image/jpg"
+          - "image/png"
+      avatar:
+        path_prefix: "avatar"
+        is_private: false
+        max_size: 10485760  # 10MB
+        allowed_types:
+          - "image/jpeg"
+          - "image/jpg"
+          - "image/png"

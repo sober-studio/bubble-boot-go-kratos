@@ -62,10 +62,21 @@ message Data {
     SMTP smtp = 2;
     map<string, string> subject_mapping = 3;  // "otp_bind" -> "绑定验证码"
   }
+  message Oss {
+    string endpoint = 1;
+    string access_key_id = 2;
+    string access_key_secret = 3;
+    string bucket = 4;
+    string region = 5;
+    string domain = 6;
+    bool use_https = 7;
+    string provider = 8;
+  }
   Database database = 1;
   Redis redis = 2;
   Sms sms = 3;
   Email email = 4;
+  Oss oss = 5;
 }
 
 message App {
@@ -92,8 +103,19 @@ message App {
     map<string, Scene> phone_scenes = 1; // 手机号场景
     map<string, Scene> email_scenes = 2; // 邮箱场景
   }
+  message Upload {
+    message Scene {
+      string path_prefix = 1;
+      bool is_private = 2;
+      int64 max_size = 3;
+      repeated string allowed_types = 4;
+    }
+    google.protobuf.Duration private_url_expires = 1;
+    map<string, Scene> scenes = 2;
+  }
   Auth auth = 1;
   string env = 2;
   int64 worker_id = 3;
   Otp otp = 4;
+  Upload upload = 5;
 }

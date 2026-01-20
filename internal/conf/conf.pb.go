@@ -140,6 +140,7 @@ type Data struct {
 	Redis         *Data_Redis            `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
 	Sms           *Data_Sms              `protobuf:"bytes,3,opt,name=sms,proto3" json:"sms,omitempty"`
 	Email         *Data_Email            `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
+	Oss           *Data_Oss              `protobuf:"bytes,5,opt,name=oss,proto3" json:"oss,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -202,12 +203,20 @@ func (x *Data) GetEmail() *Data_Email {
 	return nil
 }
 
+func (x *Data) GetOss() *Data_Oss {
+	if x != nil {
+		return x.Oss
+	}
+	return nil
+}
+
 type App struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Auth          *App_Auth              `protobuf:"bytes,1,opt,name=auth,proto3" json:"auth,omitempty"`
 	Env           string                 `protobuf:"bytes,2,opt,name=env,proto3" json:"env,omitempty"`
 	WorkerId      int64                  `protobuf:"varint,3,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
 	Otp           *App_Otp               `protobuf:"bytes,4,opt,name=otp,proto3" json:"otp,omitempty"`
+	Upload        *App_Upload            `protobuf:"bytes,5,opt,name=upload,proto3" json:"upload,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -266,6 +275,13 @@ func (x *App) GetWorkerId() int64 {
 func (x *App) GetOtp() *App_Otp {
 	if x != nil {
 		return x.Otp
+	}
+	return nil
+}
+
+func (x *App) GetUpload() *App_Upload {
+	if x != nil {
+		return x.Upload
 	}
 	return nil
 }
@@ -688,6 +704,106 @@ func (x *Data_Email) GetSubjectMapping() map[string]string {
 	return nil
 }
 
+type Data_Oss struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Endpoint        string                 `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
+	AccessKeyId     string                 `protobuf:"bytes,2,opt,name=access_key_id,json=accessKeyId,proto3" json:"access_key_id,omitempty"`
+	AccessKeySecret string                 `protobuf:"bytes,3,opt,name=access_key_secret,json=accessKeySecret,proto3" json:"access_key_secret,omitempty"`
+	Bucket          string                 `protobuf:"bytes,4,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	Region          string                 `protobuf:"bytes,5,opt,name=region,proto3" json:"region,omitempty"`
+	Domain          string                 `protobuf:"bytes,6,opt,name=domain,proto3" json:"domain,omitempty"`
+	UseHttps        bool                   `protobuf:"varint,7,opt,name=use_https,json=useHttps,proto3" json:"use_https,omitempty"`
+	Provider        string                 `protobuf:"bytes,8,opt,name=provider,proto3" json:"provider,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *Data_Oss) Reset() {
+	*x = Data_Oss{}
+	mi := &file_conf_conf_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Data_Oss) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Data_Oss) ProtoMessage() {}
+
+func (x *Data_Oss) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Data_Oss.ProtoReflect.Descriptor instead.
+func (*Data_Oss) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{2, 4}
+}
+
+func (x *Data_Oss) GetEndpoint() string {
+	if x != nil {
+		return x.Endpoint
+	}
+	return ""
+}
+
+func (x *Data_Oss) GetAccessKeyId() string {
+	if x != nil {
+		return x.AccessKeyId
+	}
+	return ""
+}
+
+func (x *Data_Oss) GetAccessKeySecret() string {
+	if x != nil {
+		return x.AccessKeySecret
+	}
+	return ""
+}
+
+func (x *Data_Oss) GetBucket() string {
+	if x != nil {
+		return x.Bucket
+	}
+	return ""
+}
+
+func (x *Data_Oss) GetRegion() string {
+	if x != nil {
+		return x.Region
+	}
+	return ""
+}
+
+func (x *Data_Oss) GetDomain() string {
+	if x != nil {
+		return x.Domain
+	}
+	return ""
+}
+
+func (x *Data_Oss) GetUseHttps() bool {
+	if x != nil {
+		return x.UseHttps
+	}
+	return false
+}
+
+func (x *Data_Oss) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
 type Data_Email_SMTP struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Host          string                 `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
@@ -700,7 +816,7 @@ type Data_Email_SMTP struct {
 
 func (x *Data_Email_SMTP) Reset() {
 	*x = Data_Email_SMTP{}
-	mi := &file_conf_conf_proto_msgTypes[11]
+	mi := &file_conf_conf_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -712,7 +828,7 @@ func (x *Data_Email_SMTP) String() string {
 func (*Data_Email_SMTP) ProtoMessage() {}
 
 func (x *Data_Email_SMTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[11]
+	mi := &file_conf_conf_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -767,7 +883,7 @@ type App_Auth struct {
 
 func (x *App_Auth) Reset() {
 	*x = App_Auth{}
-	mi := &file_conf_conf_proto_msgTypes[13]
+	mi := &file_conf_conf_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -779,7 +895,7 @@ func (x *App_Auth) String() string {
 func (*App_Auth) ProtoMessage() {}
 
 func (x *App_Auth) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[13]
+	mi := &file_conf_conf_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -826,7 +942,7 @@ type App_Otp struct {
 
 func (x *App_Otp) Reset() {
 	*x = App_Otp{}
-	mi := &file_conf_conf_proto_msgTypes[14]
+	mi := &file_conf_conf_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -838,7 +954,7 @@ func (x *App_Otp) String() string {
 func (*App_Otp) ProtoMessage() {}
 
 func (x *App_Otp) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[14]
+	mi := &file_conf_conf_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -868,6 +984,58 @@ func (x *App_Otp) GetEmailScenes() map[string]*App_Otp_Scene {
 	return nil
 }
 
+type App_Upload struct {
+	state             protoimpl.MessageState       `protogen:"open.v1"`
+	PrivateUrlExpires *durationpb.Duration         `protobuf:"bytes,1,opt,name=private_url_expires,json=privateUrlExpires,proto3" json:"private_url_expires,omitempty"`
+	Scenes            map[string]*App_Upload_Scene `protobuf:"bytes,2,rep,name=scenes,proto3" json:"scenes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *App_Upload) Reset() {
+	*x = App_Upload{}
+	mi := &file_conf_conf_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *App_Upload) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*App_Upload) ProtoMessage() {}
+
+func (x *App_Upload) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use App_Upload.ProtoReflect.Descriptor instead.
+func (*App_Upload) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{3, 2}
+}
+
+func (x *App_Upload) GetPrivateUrlExpires() *durationpb.Duration {
+	if x != nil {
+		return x.PrivateUrlExpires
+	}
+	return nil
+}
+
+func (x *App_Upload) GetScenes() map[string]*App_Upload_Scene {
+	if x != nil {
+		return x.Scenes
+	}
+	return nil
+}
+
 type App_Auth_Passport struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AutoRegister  bool                   `protobuf:"varint,1,opt,name=auto_register,json=autoRegister,proto3" json:"auto_register,omitempty"`
@@ -877,7 +1045,7 @@ type App_Auth_Passport struct {
 
 func (x *App_Auth_Passport) Reset() {
 	*x = App_Auth_Passport{}
-	mi := &file_conf_conf_proto_msgTypes[15]
+	mi := &file_conf_conf_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -889,7 +1057,7 @@ func (x *App_Auth_Passport) String() string {
 func (*App_Auth_Passport) ProtoMessage() {}
 
 func (x *App_Auth_Passport) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[15]
+	mi := &file_conf_conf_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -923,7 +1091,7 @@ type App_Auth_JWT struct {
 
 func (x *App_Auth_JWT) Reset() {
 	*x = App_Auth_JWT{}
-	mi := &file_conf_conf_proto_msgTypes[16]
+	mi := &file_conf_conf_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -935,7 +1103,7 @@ func (x *App_Auth_JWT) String() string {
 func (*App_Auth_JWT) ProtoMessage() {}
 
 func (x *App_Auth_JWT) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[16]
+	mi := &file_conf_conf_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -984,7 +1152,7 @@ type App_Otp_Scene struct {
 
 func (x *App_Otp_Scene) Reset() {
 	*x = App_Otp_Scene{}
-	mi := &file_conf_conf_proto_msgTypes[17]
+	mi := &file_conf_conf_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -996,7 +1164,7 @@ func (x *App_Otp_Scene) String() string {
 func (*App_Otp_Scene) ProtoMessage() {}
 
 func (x *App_Otp_Scene) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[17]
+	mi := &file_conf_conf_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1040,6 +1208,74 @@ func (x *App_Otp_Scene) GetCodeLength() int32 {
 	return 0
 }
 
+type App_Upload_Scene struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PathPrefix    string                 `protobuf:"bytes,1,opt,name=path_prefix,json=pathPrefix,proto3" json:"path_prefix,omitempty"`
+	IsPrivate     bool                   `protobuf:"varint,2,opt,name=is_private,json=isPrivate,proto3" json:"is_private,omitempty"`
+	MaxSize       int64                  `protobuf:"varint,3,opt,name=max_size,json=maxSize,proto3" json:"max_size,omitempty"`
+	AllowedTypes  []string               `protobuf:"bytes,4,rep,name=allowed_types,json=allowedTypes,proto3" json:"allowed_types,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *App_Upload_Scene) Reset() {
+	*x = App_Upload_Scene{}
+	mi := &file_conf_conf_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *App_Upload_Scene) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*App_Upload_Scene) ProtoMessage() {}
+
+func (x *App_Upload_Scene) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use App_Upload_Scene.ProtoReflect.Descriptor instead.
+func (*App_Upload_Scene) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{3, 2, 0}
+}
+
+func (x *App_Upload_Scene) GetPathPrefix() string {
+	if x != nil {
+		return x.PathPrefix
+	}
+	return ""
+}
+
+func (x *App_Upload_Scene) GetIsPrivate() bool {
+	if x != nil {
+		return x.IsPrivate
+	}
+	return false
+}
+
+func (x *App_Upload_Scene) GetMaxSize() int64 {
+	if x != nil {
+		return x.MaxSize
+	}
+	return 0
+}
+
+func (x *App_Upload_Scene) GetAllowedTypes() []string {
+	if x != nil {
+		return x.AllowedTypes
+	}
+	return nil
+}
+
 var File_conf_conf_proto protoreflect.FileDescriptor
 
 const file_conf_conf_proto_rawDesc = "" +
@@ -1060,12 +1296,13 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xf0\t\n" +
+	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\x8d\f\n" +
 	"\x04Data\x125\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x19.kratos.api.Data.DatabaseR\bdatabase\x12,\n" +
 	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x12&\n" +
 	"\x03sms\x18\x03 \x01(\v2\x14.kratos.api.Data.SmsR\x03sms\x12,\n" +
-	"\x05email\x18\x04 \x01(\v2\x16.kratos.api.Data.EmailR\x05email\x1a\xcd\x01\n" +
+	"\x05email\x18\x04 \x01(\v2\x16.kratos.api.Data.EmailR\x05email\x12&\n" +
+	"\x03oss\x18\x05 \x01(\v2\x14.kratos.api.Data.OssR\x03oss\x1a\xcd\x01\n" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12$\n" +
@@ -1100,12 +1337,23 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\bpassword\x18\x04 \x01(\tR\bpassword\x1aA\n" +
 	"\x13SubjectMappingEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb4\a\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a\xf2\x01\n" +
+	"\x03Oss\x12\x1a\n" +
+	"\bendpoint\x18\x01 \x01(\tR\bendpoint\x12\"\n" +
+	"\raccess_key_id\x18\x02 \x01(\tR\vaccessKeyId\x12*\n" +
+	"\x11access_key_secret\x18\x03 \x01(\tR\x0faccessKeySecret\x12\x16\n" +
+	"\x06bucket\x18\x04 \x01(\tR\x06bucket\x12\x16\n" +
+	"\x06region\x18\x05 \x01(\tR\x06region\x12\x16\n" +
+	"\x06domain\x18\x06 \x01(\tR\x06domain\x12\x1b\n" +
+	"\tuse_https\x18\a \x01(\bR\buseHttps\x12\x1a\n" +
+	"\bprovider\x18\b \x01(\tR\bprovider\"\xd9\n" +
+	"\n" +
 	"\x03App\x12(\n" +
 	"\x04auth\x18\x01 \x01(\v2\x14.kratos.api.App.AuthR\x04auth\x12\x10\n" +
 	"\x03env\x18\x02 \x01(\tR\x03env\x12\x1b\n" +
 	"\tworker_id\x18\x03 \x01(\x03R\bworkerId\x12%\n" +
-	"\x03otp\x18\x04 \x01(\v2\x13.kratos.api.App.OtpR\x03otp\x1a\x8e\x02\n" +
+	"\x03otp\x18\x04 \x01(\v2\x13.kratos.api.App.OtpR\x03otp\x12.\n" +
+	"\x06upload\x18\x05 \x01(\v2\x16.kratos.api.App.UploadR\x06upload\x1a\x8e\x02\n" +
 	"\x04Auth\x12!\n" +
 	"\fpublic_paths\x18\x01 \x03(\tR\vpublicPaths\x129\n" +
 	"\bpassport\x18\x02 \x01(\v2\x1d.kratos.api.App.Auth.PassportR\bpassport\x12*\n" +
@@ -1131,7 +1379,20 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x19.kratos.api.App.Otp.SceneR\x05value:\x028\x01\x1aY\n" +
 	"\x10EmailScenesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12/\n" +
-	"\x05value\x18\x02 \x01(\v2\x19.kratos.api.App.Otp.SceneR\x05value:\x028\x01B*Z(bubble-boot-go-kratos/internal/conf;confb\x06proto3"
+	"\x05value\x18\x02 \x01(\v2\x19.kratos.api.App.Otp.SceneR\x05value:\x028\x01\x1a\xf2\x02\n" +
+	"\x06Upload\x12I\n" +
+	"\x13private_url_expires\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x11privateUrlExpires\x12:\n" +
+	"\x06scenes\x18\x02 \x03(\v2\".kratos.api.App.Upload.ScenesEntryR\x06scenes\x1a\x87\x01\n" +
+	"\x05Scene\x12\x1f\n" +
+	"\vpath_prefix\x18\x01 \x01(\tR\n" +
+	"pathPrefix\x12\x1d\n" +
+	"\n" +
+	"is_private\x18\x02 \x01(\bR\tisPrivate\x12\x19\n" +
+	"\bmax_size\x18\x03 \x01(\x03R\amaxSize\x12#\n" +
+	"\rallowed_types\x18\x04 \x03(\tR\fallowedTypes\x1aW\n" +
+	"\vScenesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x122\n" +
+	"\x05value\x18\x02 \x01(\v2\x1c.kratos.api.App.Upload.SceneR\x05value:\x028\x01B*Z(bubble-boot-go-kratos/internal/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once
@@ -1145,7 +1406,7 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_conf_conf_proto_goTypes = []any{
 	(*Bootstrap)(nil),           // 0: kratos.api.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.Server
@@ -1157,17 +1418,21 @@ var file_conf_conf_proto_goTypes = []any{
 	(*Data_Redis)(nil),          // 7: kratos.api.Data.Redis
 	(*Data_Sms)(nil),            // 8: kratos.api.Data.Sms
 	(*Data_Email)(nil),          // 9: kratos.api.Data.Email
-	nil,                         // 10: kratos.api.Data.Sms.TemplateMappingEntry
-	(*Data_Email_SMTP)(nil),     // 11: kratos.api.Data.Email.SMTP
-	nil,                         // 12: kratos.api.Data.Email.SubjectMappingEntry
-	(*App_Auth)(nil),            // 13: kratos.api.App.Auth
-	(*App_Otp)(nil),             // 14: kratos.api.App.Otp
-	(*App_Auth_Passport)(nil),   // 15: kratos.api.App.Auth.Passport
-	(*App_Auth_JWT)(nil),        // 16: kratos.api.App.Auth.JWT
-	(*App_Otp_Scene)(nil),       // 17: kratos.api.App.Otp.Scene
-	nil,                         // 18: kratos.api.App.Otp.PhoneScenesEntry
-	nil,                         // 19: kratos.api.App.Otp.EmailScenesEntry
-	(*durationpb.Duration)(nil), // 20: google.protobuf.Duration
+	(*Data_Oss)(nil),            // 10: kratos.api.Data.Oss
+	nil,                         // 11: kratos.api.Data.Sms.TemplateMappingEntry
+	(*Data_Email_SMTP)(nil),     // 12: kratos.api.Data.Email.SMTP
+	nil,                         // 13: kratos.api.Data.Email.SubjectMappingEntry
+	(*App_Auth)(nil),            // 14: kratos.api.App.Auth
+	(*App_Otp)(nil),             // 15: kratos.api.App.Otp
+	(*App_Upload)(nil),          // 16: kratos.api.App.Upload
+	(*App_Auth_Passport)(nil),   // 17: kratos.api.App.Auth.Passport
+	(*App_Auth_JWT)(nil),        // 18: kratos.api.App.Auth.JWT
+	(*App_Otp_Scene)(nil),       // 19: kratos.api.App.Otp.Scene
+	nil,                         // 20: kratos.api.App.Otp.PhoneScenesEntry
+	nil,                         // 21: kratos.api.App.Otp.EmailScenesEntry
+	(*App_Upload_Scene)(nil),    // 22: kratos.api.App.Upload.Scene
+	nil,                         // 23: kratos.api.App.Upload.ScenesEntry
+	(*durationpb.Duration)(nil), // 24: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.Bootstrap.server:type_name -> kratos.api.Server
@@ -1179,29 +1444,34 @@ var file_conf_conf_proto_depIdxs = []int32{
 	7,  // 6: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
 	8,  // 7: kratos.api.Data.sms:type_name -> kratos.api.Data.Sms
 	9,  // 8: kratos.api.Data.email:type_name -> kratos.api.Data.Email
-	13, // 9: kratos.api.App.auth:type_name -> kratos.api.App.Auth
-	14, // 10: kratos.api.App.otp:type_name -> kratos.api.App.Otp
-	20, // 11: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	20, // 12: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	20, // 13: kratos.api.Data.Database.conn_max_lifetime:type_name -> google.protobuf.Duration
-	20, // 14: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	20, // 15: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	10, // 16: kratos.api.Data.Sms.template_mapping:type_name -> kratos.api.Data.Sms.TemplateMappingEntry
-	11, // 17: kratos.api.Data.Email.smtp:type_name -> kratos.api.Data.Email.SMTP
-	12, // 18: kratos.api.Data.Email.subject_mapping:type_name -> kratos.api.Data.Email.SubjectMappingEntry
-	15, // 19: kratos.api.App.Auth.passport:type_name -> kratos.api.App.Auth.Passport
-	16, // 20: kratos.api.App.Auth.jwt:type_name -> kratos.api.App.Auth.JWT
-	18, // 21: kratos.api.App.Otp.phone_scenes:type_name -> kratos.api.App.Otp.PhoneScenesEntry
-	19, // 22: kratos.api.App.Otp.email_scenes:type_name -> kratos.api.App.Otp.EmailScenesEntry
-	20, // 23: kratos.api.App.Otp.Scene.expires_in:type_name -> google.protobuf.Duration
-	20, // 24: kratos.api.App.Otp.Scene.resend_interval:type_name -> google.protobuf.Duration
-	17, // 25: kratos.api.App.Otp.PhoneScenesEntry.value:type_name -> kratos.api.App.Otp.Scene
-	17, // 26: kratos.api.App.Otp.EmailScenesEntry.value:type_name -> kratos.api.App.Otp.Scene
-	27, // [27:27] is the sub-list for method output_type
-	27, // [27:27] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	10, // 9: kratos.api.Data.oss:type_name -> kratos.api.Data.Oss
+	14, // 10: kratos.api.App.auth:type_name -> kratos.api.App.Auth
+	15, // 11: kratos.api.App.otp:type_name -> kratos.api.App.Otp
+	16, // 12: kratos.api.App.upload:type_name -> kratos.api.App.Upload
+	24, // 13: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	24, // 14: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	24, // 15: kratos.api.Data.Database.conn_max_lifetime:type_name -> google.protobuf.Duration
+	24, // 16: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	24, // 17: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	11, // 18: kratos.api.Data.Sms.template_mapping:type_name -> kratos.api.Data.Sms.TemplateMappingEntry
+	12, // 19: kratos.api.Data.Email.smtp:type_name -> kratos.api.Data.Email.SMTP
+	13, // 20: kratos.api.Data.Email.subject_mapping:type_name -> kratos.api.Data.Email.SubjectMappingEntry
+	17, // 21: kratos.api.App.Auth.passport:type_name -> kratos.api.App.Auth.Passport
+	18, // 22: kratos.api.App.Auth.jwt:type_name -> kratos.api.App.Auth.JWT
+	20, // 23: kratos.api.App.Otp.phone_scenes:type_name -> kratos.api.App.Otp.PhoneScenesEntry
+	21, // 24: kratos.api.App.Otp.email_scenes:type_name -> kratos.api.App.Otp.EmailScenesEntry
+	24, // 25: kratos.api.App.Upload.private_url_expires:type_name -> google.protobuf.Duration
+	23, // 26: kratos.api.App.Upload.scenes:type_name -> kratos.api.App.Upload.ScenesEntry
+	24, // 27: kratos.api.App.Otp.Scene.expires_in:type_name -> google.protobuf.Duration
+	24, // 28: kratos.api.App.Otp.Scene.resend_interval:type_name -> google.protobuf.Duration
+	19, // 29: kratos.api.App.Otp.PhoneScenesEntry.value:type_name -> kratos.api.App.Otp.Scene
+	19, // 30: kratos.api.App.Otp.EmailScenesEntry.value:type_name -> kratos.api.App.Otp.Scene
+	22, // 31: kratos.api.App.Upload.ScenesEntry.value:type_name -> kratos.api.App.Upload.Scene
+	32, // [32:32] is the sub-list for method output_type
+	32, // [32:32] is the sub-list for method input_type
+	32, // [32:32] is the sub-list for extension type_name
+	32, // [32:32] is the sub-list for extension extendee
+	0,  // [0:32] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -1215,7 +1485,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_conf_conf_proto_rawDesc), len(file_conf_conf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
