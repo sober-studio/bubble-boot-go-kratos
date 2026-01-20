@@ -3,6 +3,7 @@ package oss
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -36,7 +37,7 @@ func NewLocalStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	}
 }
 
-func (s *localStorage) Upload(ctx context.Context, key string, data []byte, isPrivate bool) (string, error) {
+func (s *localStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
 	// 拼接完整文件路径
 	filePath := filepath.Join(s.baseDir, key)
 
@@ -46,8 +47,15 @@ func (s *localStorage) Upload(ctx context.Context, key string, data []byte, isPr
 		return "", err
 	}
 
-	// 写入文件
-	if err := os.WriteFile(filePath, data, 0644); err != nil {
+	// 创建目标文件
+	out, err := os.Create(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+
+	// 流式写入文件
+	if _, err := io.Copy(out, reader); err != nil {
 		return "", err
 	}
 

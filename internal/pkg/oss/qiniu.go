@@ -1,9 +1,9 @@
 package oss
 
 import (
-	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -37,7 +37,7 @@ func NewQiniuStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	return s
 }
 
-func (s *qiniuStorage) Upload(ctx context.Context, key string, data []byte, isPrivate bool) (string, error) {
+func (s *qiniuStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
 	putPolicy := storage.PutPolicy{
 		Scope: s.conf.Bucket,
 	}
@@ -46,8 +46,7 @@ func (s *qiniuStorage) Upload(ctx context.Context, key string, data []byte, isPr
 	formUploader := storage.NewFormUploader(s.cfg)
 	ret := storage.PutRet{}
 
-	dataLen := int64(len(data))
-	err := formUploader.Put(ctx, &ret, upToken, key, bytes.NewReader(data), dataLen, nil)
+	err := formUploader.Put(ctx, &ret, upToken, key, reader, size, nil)
 	if err != nil {
 		return "", err
 	}

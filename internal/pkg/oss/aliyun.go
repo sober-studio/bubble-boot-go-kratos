@@ -1,9 +1,9 @@
 package oss
 
 import (
-	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
@@ -37,7 +37,7 @@ func NewAliyunStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	}
 }
 
-func (s *aliyunStorage) Upload(ctx context.Context, key string, data []byte, isPrivate bool) (string, error) {
+func (s *aliyunStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
 	// 设置访问权限
 	var options []oss.Option
 	if isPrivate {
@@ -46,7 +46,7 @@ func (s *aliyunStorage) Upload(ctx context.Context, key string, data []byte, isP
 		options = append(options, oss.ObjectACL(oss.ACLPublicRead))
 	}
 
-	err := s.bucket.PutObject(key, bytes.NewReader(data), options...)
+	err := s.bucket.PutObject(key, reader, options...)
 	if err != nil {
 		return "", err
 	}

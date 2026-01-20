@@ -1,9 +1,9 @@
 package oss
 
 import (
-	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"net/url"
 	"time"
 
@@ -37,9 +37,8 @@ func NewMinioStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	}
 }
 
-func (s *minioStorage) Upload(ctx context.Context, key string, data []byte, isPrivate bool) (string, error) {
-	reader := bytes.NewReader(data)
-	_, err := s.client.PutObject(ctx, s.conf.Bucket, key, reader, int64(len(data)), minio.PutObjectOptions{
+func (s *minioStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
+	_, err := s.client.PutObject(ctx, s.conf.Bucket, key, reader, size, minio.PutObjectOptions{
 		ContentType: "application/octet-stream",
 		// 如果需要可以在这里设置 UserMetadata 或其他选项
 	})
