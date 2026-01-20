@@ -37,13 +37,17 @@ func NewAliyunStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	}
 }
 
-func (s *aliyunStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
+func (s *aliyunStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, contentType string, isPrivate bool) (string, error) {
 	// 设置访问权限
 	var options []oss.Option
 	if isPrivate {
 		options = append(options, oss.ObjectACL(oss.ACLPrivate))
 	} else {
 		options = append(options, oss.ObjectACL(oss.ACLPublicRead))
+	}
+
+	if contentType != "" {
+		options = append(options, oss.ContentType(contentType))
 	}
 
 	err := s.bucket.PutObject(key, reader, options...)

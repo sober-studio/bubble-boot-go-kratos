@@ -37,7 +37,7 @@ func NewQiniuStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	return s
 }
 
-func (s *qiniuStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
+func (s *qiniuStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, contentType string, isPrivate bool) (string, error) {
 	putPolicy := storage.PutPolicy{
 		Scope: s.conf.Bucket,
 	}
@@ -46,7 +46,11 @@ func (s *qiniuStorage) Upload(ctx context.Context, key string, reader io.Reader,
 	formUploader := storage.NewFormUploader(s.cfg)
 	ret := storage.PutRet{}
 
-	err := formUploader.Put(ctx, &ret, upToken, key, reader, size, nil)
+	putExtra := storage.PutExtra{
+		MimeType: contentType,
+	}
+
+	err := formUploader.Put(ctx, &ret, upToken, key, reader, size, &putExtra)
 	if err != nil {
 		return "", err
 	}

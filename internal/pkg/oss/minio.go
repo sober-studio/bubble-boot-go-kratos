@@ -37,9 +37,12 @@ func NewMinioStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	}
 }
 
-func (s *minioStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
+func (s *minioStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, contentType string, isPrivate bool) (string, error) {
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
 	_, err := s.client.PutObject(ctx, s.conf.Bucket, key, reader, size, minio.PutObjectOptions{
-		ContentType: "application/octet-stream",
+		ContentType: contentType,
 		// 如果需要可以在这里设置 UserMetadata 或其他选项
 	})
 	if err != nil {

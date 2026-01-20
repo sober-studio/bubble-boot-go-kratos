@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -37,9 +38,34 @@ func NewLocalStorage(c *conf.Data_Oss, logger log.Logger) Storage {
 	}
 }
 
-func (s *localStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, isPrivate bool) (string, error) {
+func (s *localStorage) Upload(ctx context.Context, key string, reader io.Reader, size int64, contentType string, isPrivate bool) (string, error) {
 	// 拼接完整文件路径
 	filePath := filepath.Join(s.baseDir, key)
+
+	// 安全检查：防止路径遍历 (Path Traversal)
+	// 确保生成的路径仍在 baseDir 下
+	// Clean 路径以处理 .. 等相对路径符号
+	cleanPath := filepath.Clean(filePath)
+	cleanBase := filepath.Clean(s.baseDir)
+	// 注意：这里需要确保 cleanBase 后面带上 separator，否则 /base/dir2 可能会匹配 /base/dir 前缀
+	if !filepath.IsAbs(cleanBase) {
+		absBase, err := filepath.Abs(cleanBase)
+		if err == nil {
+			cleanBase = absBase
+		}
+	}
+	if !filepath.IsAbs(cleanPath) {
+		absPath, err := filepath.Abs(cleanPath)
+		if err == nil {
+			cleanPath = absPath
+		}
+	}
+	// 简单的包含检查
+	// 注意：filepath.Rel 可能更严谨，但要处理不同平台的差异
+	rel, err := filepath.Rel(cleanBase, cleanPath)
+	if err != nil || strings.HasPrefix(rel, "..") {
+		return "", fmt.Errorf("invalid file path: %s", key)
+	}
 
 	// 确保文件所在目录存在
 	dir := filepath.Dir(filePath)
