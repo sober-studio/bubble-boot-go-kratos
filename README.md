@@ -12,3 +12,7 @@
 ## 相关文档
 
 - [Kratos](https://go-kratos.dev/)
+
+## 其他
+
+bubble-admin-go-kratos
