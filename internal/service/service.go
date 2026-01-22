@@ -7,4 +7,6 @@ var ProviderSet = wire.NewSet(
 	NewPublicService,
 	NewUploadService,
 	NewPassportService,
+	NewChatService,
+	NewWebsocketService,
 )

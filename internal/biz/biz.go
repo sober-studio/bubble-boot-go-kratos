@@ -19,6 +19,7 @@ var ProviderSet = wire.NewSet(
 	wire.Bind(new(EmailSender), new(email.Sender)),
 	oss.NewOSS,
 	// domains
+	NewChatUseCase,
 	NewPassportUseCase,
 	NewUploadUseCase,
 )

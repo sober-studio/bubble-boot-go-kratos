@@ -28,6 +28,7 @@ require (
 	github.com/alibabacloud-go/tea-utils/v2 v2.0.9
 	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
 	github.com/aliyun/credentials-go v1.4.10
+	github.com/gorilla/websocket v1.5.3
 	github.com/minio/minio-go/v7 v7.0.98
 	github.com/qiniu/go-sdk/v7 v7.25.6
 	github.com/robfig/cron/v3 v3.0.1

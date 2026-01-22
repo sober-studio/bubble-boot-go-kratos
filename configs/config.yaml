@@ -35,7 +35,6 @@ data:
       "otp_login": "SMS_10000002"
       "otp_bind": "SMS_10000003"
       "otp_reset": "SMS_10000003"
-
   # 邮件供应商细节
   email:
     from: abc@demo.com

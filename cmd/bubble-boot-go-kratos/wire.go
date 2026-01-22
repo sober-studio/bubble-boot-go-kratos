@@ -14,6 +14,7 @@ import (
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/job"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/ws"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/server"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
 )
@@ -27,6 +28,7 @@ func wireApp(*conf.Server, *conf.Data, *conf.App, log.Logger) (*kratos.App, func
 		biz.ProviderSet,
 		data.ProviderSet,
 		auth.ProviderSet,
+		ws.NewHub,
 		newApp,
 	))
 }

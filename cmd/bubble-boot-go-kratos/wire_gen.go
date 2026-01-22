@@ -16,6 +16,7 @@ import (
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/auth"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/email"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/sms"
+	"github.com/sober-studio/bubble-boot-go-kratos/internal/pkg/ws"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/server"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/service"
 )
@@ -48,7 +49,12 @@ func wireApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger
 	passportUseCase := biz.NewPassportUseCase(tokenService, userRepo, app, logger)
 	publicService := service.NewPublicService(captchaUseCase, otpUseCase, passportUseCase, logger)
 	passportService := service.NewPassportService(passportUseCase, otpUseCase, captchaUseCase)
-	httpServer := server.NewHTTPServer(confServer, app, publicService, passportService, tokenService, logger)
+	hub := ws.NewHub(logger)
+	chatRepo := data.NewChatRepo(dataData, logger)
+	chatUseCase := biz.NewChatUseCase(chatRepo, logger)
+	chatService := service.NewChatService(hub, chatUseCase)
+	websocketService := service.NewWebsocketService(hub, chatService, tokenService, logger)
+	httpServer := server.NewHTTPServer(confServer, app, publicService, passportService, tokenService, websocketService, logger)
 	helloJob := job.NewHelloJob(logger)
 	cronServer := server.NewCronServer(confServer, logger, helloJob)
 	kratosApp := newApp(logger, grpcServer, httpServer, cronServer)

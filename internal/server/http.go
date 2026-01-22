@@ -25,6 +25,7 @@ func NewHTTPServer(
 	public *service.PublicService,
 	passport *service.PassportService,
 	tokenService auth.TokenService,
+	wsSvc *service.WebsocketService,
 	logger log.Logger,
 ) *http.Server {
 
@@ -50,6 +51,11 @@ func NewHTTPServer(
 	}
 
 	srv := http.NewServer(opts...)
+
+	// 同端口集成点：手动绑定路由
+	// 注意：这里用 Handlers.HandleFunc 是绕过 Kratos 的 Proto 解析，直接处理原始 HTTP 请求
+	srv.HandleFunc("/ws", wsSvc.WSHandler)
+
 	passportV1.RegisterPassportHTTPServer(srv, passport)
 	publicV1.RegisterPublicHTTPServer(srv, public)
 
