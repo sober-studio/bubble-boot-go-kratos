@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"os"
+	"strings"
 
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/conf"
 	"github.com/sober-studio/bubble-boot-go-kratos/internal/data"
@@ -81,7 +82,7 @@ func main() {
 	// 遍历所有表，为每个表生成模型时应用 baseModelOpt
 	for _, tableName := range tableList {
 		// 过滤掉系统表或迁移表
-		if tableName == "schema_migrations" {
+		if tableName == "schema_migrations" || strings.HasPrefix(tableName, "sys_") {
 			continue
 		}
 
